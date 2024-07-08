@@ -33,12 +33,7 @@ export const ResourcesPopover = () => (
 				</PopoverTrigger>
 				<PopoverContent p="1" width={{ base: "sm", md: "3xs" }}>
 					{items.map((item, id) => (
-						<Link
-							variant="menu"
-							href={item.href}
-							key={id}
-							className="hover:bg-blue-200"
-						>
+						<Link href={item.href} key={id} className="hover:bg-blue-200">
 							<Stack spacing="4" direction="row" p="3">
 								<Text fontWeight="medium" fontSize="xs">
 									{item.title}
