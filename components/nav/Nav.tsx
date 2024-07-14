@@ -41,7 +41,7 @@ const Nav = () => {
 			<Box
 				as="nav"
 				boxShadow={useColorModeValue("sm", "sm-dark")}
-				className="w-screen fixed"
+				className="w-screen sticky"
 				paddingX={4}
 				zIndex={5}
 			>

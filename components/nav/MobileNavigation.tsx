@@ -70,7 +70,7 @@ const Navigation = ({ isNavOpen, toggle, CareersOptions }: Props) => {
 						className="py-2 hover:tracking-widest text-lg font-bold text-white shadow-md w-full ml-2 flex rounded-md pl-4"
 						onClick={toggle}
 					>
-						Blog
+						Hosted Events
 					</chakra.a>
 				</motion.li>
 				<motion.li variants={variantsTwo} className="full">
@@ -79,7 +79,7 @@ const Navigation = ({ isNavOpen, toggle, CareersOptions }: Props) => {
 						className="py-2 hover:tracking-widest text-lg font-bold text-white shadow-md w-full ml-2 flex rounded-md pl-4"
 						onClick={toggle}
 					>
-						Contact
+						FAQs
 					</Link>
 				</motion.li>
 
