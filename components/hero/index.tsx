@@ -1,4 +1,4 @@
-import { Button, Stack, Text } from "@chakra-ui/react";
+import { Button, Image, Stack, Text } from "@chakra-ui/react";
 import React from "react";
 
 type Props = {};
@@ -33,6 +33,11 @@ const Hero = (props: Props) => {
 				>
 					Get Started
 				</Button>
+			</Stack>
+			<Stack flexDir={"row"} flexWrap={"wrap"} justifyContent={"center"} mt={12}>
+				<Image src="/events.webp" width={"300px"} height={"300px"} alt="events" />
+				<Image src="/review.webp" width={"300px"} height={"300px"} alt="review" />
+				<Image src="/faq.webp" width={"300px"} height={"300px"} alt="FAQ" />
 			</Stack>
 		</Stack>
 	);
