@@ -11,15 +11,11 @@ import {
 import Link from "next/link";
 import { FiPhone } from "react-icons/fi";
 import { HiOutlineLocationMarker } from "react-icons/hi";
-import { MdOutlineMail } from "react-icons/md";
-import { MdOutlineLocalPhone } from "react-icons/md";
 import { FaTiktok } from "react-icons/fa";
 import { BsFacebook, BsInstagram, BsWhatsapp, BsLinkedin } from "react-icons/bs";
 import { FaXTwitter } from "react-icons/fa6";
 
-type Props = {};
-
-const Footer = (props: Props) => {
+const Footer = () => {
 	return (
 		<Box as="footer" bg="rgba(229, 245, 229, 0.2)" pt={10} py="4">
 			<Stack
