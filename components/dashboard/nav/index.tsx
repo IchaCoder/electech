@@ -25,13 +25,7 @@ const Nav = () => {
     <>
       <MobileSidebar isOpen={isOpen} onClose={onClose} />
       <section>
-        <Box
-          as="nav"
-          boxShadow={useColorModeValue("sm", "sm-dark")}
-          className="w-screen sticky"
-          paddingX={2}
-          zIndex={5}
-        >
+        <Box as="nav" boxShadow={useColorModeValue("sm", "sm-dark")} className="w-screen" paddingX={2} zIndex={5}>
           <chakra.div
             display={"flex"}
             justifyContent={"space-between"}
@@ -48,7 +42,7 @@ const Nav = () => {
                 onClick={onOpen}
               />
               <Link href="/dashboard" className="w-max">
-                <LogoIcon width={"100px"} />
+                <LogoIcon width={"120px"} />
               </Link>
             </HStack>
 
