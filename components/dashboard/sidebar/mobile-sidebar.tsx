@@ -5,11 +5,15 @@ import {
   DrawerCloseButton,
   DrawerContent,
   DrawerFooter,
-  DrawerHeader,
   DrawerOverlay,
-  IconButton,
+  Stack,
+  Box,
+  DrawerHeader,
 } from "@chakra-ui/react";
 import { MdLogout } from "react-icons/md";
+import { nav_links } from "./links";
+import { Link } from "@chakra-ui/next-js";
+import LogoIcon from "@/app/icons/logo";
 
 type Props = {
   isOpen: boolean;
@@ -22,17 +26,50 @@ const MobileSidebar = ({ isOpen, onClose }: Props) => {
       <DrawerOverlay />
       <DrawerContent>
         <DrawerCloseButton />
-        {/* <DrawerHeader>Create your account</DrawerHeader> */}
+        <DrawerHeader>
+          {" "}
+          <Link href="/dashboard" className="w-max">
+            <LogoIcon width={"120px"} />
+          </Link>
+        </DrawerHeader>
 
         <DrawerBody>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus reiciendis debitis officia, fugiat
-          cumque, eum perferendis aliquid animi incidunt similique pariatur iure explicabo aut odio esse tempore
-          inventore, impedit quisquam?
+          <Stack px={{ base: 5, lg: 8 }} my={4} display={{ base: "flex", md: "none" }} position={"relative"}>
+            {nav_links.map((link, index) => (
+              <Stack flexDir={"row"} gap={".25rem"} key={index}>
+                <Link
+                  href={link.href}
+                  w={{ base: "150px", lg: "170px" }}
+                  p={{ base: 2, lg: 3 }}
+                  pl={{ base: 3, lg: 6 }}
+                  alignItems={"center"}
+                  _hover={{ textDecor: "none" }}
+                  display={"flex"}
+                  fontSize={{ base: "md", lg: "lg" }}
+                  gap={{ base: 4, lg: 6 }}
+                  bg={"brand.dashboard"}
+                  borderRadius={"25px 0 0 25px"}
+                >
+                  {" "}
+                  <link.icon /> {link.name}
+                </Link>
+                <Box height={"full"} w={"5px"} bgColor={"rgba(97, 153, 203, 1)"}></Box>
+              </Stack>
+            ))}
+          </Stack>
         </DrawerBody>
 
         <DrawerFooter flexDir={"column"} gap={2} width={"max-content"} mx={"auto"}>
-          <div>Sign Out</div>
-          <IconButton aria-label="sign out" icon={<MdLogout />} />
+          <Button
+            size={"lg"}
+            aria-label="sign out"
+            position={"absolute"}
+            bottom={"10px"}
+            borderRadius={"full"}
+            leftIcon={<MdLogout />}
+          >
+            Sign Out
+          </Button>
         </DrawerFooter>
       </DrawerContent>
     </Drawer>

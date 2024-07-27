@@ -4,11 +4,9 @@ import { Box, Button, Stack } from "@chakra-ui/react";
 import { nav_links } from "./links";
 import { MdLogout } from "react-icons/md";
 
-type Props = {};
-
-const Sidebar = (props: Props) => {
+const Sidebar = () => {
   return (
-    <Stack px={{ base: 5, lg: 8 }} my={4} position={"relative"}>
+    <Stack px={{ base: 5, lg: 8 }} my={4} display={{ base: "none", md: "flex" }} position={"relative"}>
       <Button
         size={"lg"}
         aria-label="sign out"

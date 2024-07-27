@@ -1,6 +1,6 @@
 import Nav from "@/components/dashboard/nav";
 import Sidebar from "@/components/dashboard/sidebar";
-import { Box, Stack } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 
 type Props = {
   children: React.ReactNode;
@@ -12,7 +12,9 @@ const Layout = ({ children }: Props) => {
       <Nav />
       <Box height={"90vh"} overflow={"auto"} display={"flex"}>
         <Sidebar />
-        <main>{children}</main>
+        <Box bgColor={"brand.dashboard"} m={{ base: 1, sm: 4 }} p={4} overflow={"auto"} borderRadius={"lg"} w={"full"}>
+          {children}
+        </Box>
       </Box>
     </>
   );
