@@ -54,6 +54,21 @@ const Events = (props: Props) => {
         </Button>
       </Stack>
       <EventList />
+      <Box textAlign="center" mt={8}>
+        <Text fontSize={{ base: "xl", xl: "2xl" }} fontWeight={"bold"}>
+          No event found
+        </Text>
+        <Button
+          as={Link}
+          href={"/dashboard/add-event"}
+          bgColor={"rgba(97, 153, 203, 1)"}
+          color={"white"}
+          _hover={{ opacity: 0.7 }}
+          _focus={{ opacity: 0.7 }}
+        >
+          Add Event
+        </Button>
+      </Box>
     </Box>
   );
 };
