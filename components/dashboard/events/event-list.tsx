@@ -9,7 +9,7 @@ const EventList = (props: Props) => {
     <Stack direction={{ base: "column", sm: "row" }} spacing="4" flexWrap={"wrap"}>
       <Card
         as={Link}
-        href={"/dashboard/home"}
+        href={"/dashboard/11"}
         maxW={"400px"}
         bgColor={"gray.100"}
         borderRadius={"xl"}
@@ -29,7 +29,7 @@ const EventList = (props: Props) => {
       </Card>
       <Card
         as={Link}
-        href={"/dashboard/home"}
+        href={"/dashboard/11"}
         maxW={"400px"}
         bgColor={"gray.100"}
         borderRadius={"xl"}

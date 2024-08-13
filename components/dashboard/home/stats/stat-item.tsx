@@ -19,7 +19,7 @@ export const Stat = (props: Props) => {
         <Text textStyle="sm" color="fg.muted">
           {label}
         </Text>
-        <Heading size={{ base: "sm", md: "md" }}>{value}</Heading>
+        <Heading size={"xl"}>{value}</Heading>
       </Stack>
     </Box>
   );
