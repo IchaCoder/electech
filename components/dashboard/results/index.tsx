@@ -7,11 +7,10 @@ import { useState } from "react";
 
 interface Props extends SelectProps {}
 
-type ViewTypes = "block" | "graph" | "table";
+type ViewTypes = "block" | "chart" | "table";
 
 const Results = (props: Props) => {
   const [view, setView] = useState<ViewTypes>("block");
-  console.log(view);
 
   return (
     <Box py={8} px={{ base: 0, sm: 4, xl: 12 }}>
@@ -25,23 +24,72 @@ const Results = (props: Props) => {
               SRC President
             </Text>
             <HStack spacing={4}>
+              {view === "table" && (
+                <Select
+                  size="xs"
+                  width={"max-content"}
+                  aria-label="Sort by"
+                  defaultValue={sortByOptions.defaultValue}
+                  focusBorderColor={useColorModeValue("blue.500", "blue.200")}
+                  rounded="md"
+                  borderWidth={1}
+                  borderColor={"gray.800"}
+                  {...props}
+                >
+                  {sortByOptions.options.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </Select>
+              )}
               <Select
                 size="xs"
                 width={"max-content"}
                 aria-label="Sort by"
-                defaultValue={sortByOptions.defaultValue}
+                defaultValue={view}
                 focusBorderColor={useColorModeValue("blue.500", "blue.200")}
                 rounded="md"
                 borderWidth={1}
                 borderColor={"gray.800"}
+                onChange={(e) => setView(e.target.value as ViewTypes)}
                 {...props}
               >
-                {sortByOptions.options.map((option) => (
+                {viewOptions.options.map((option) => (
                   <option key={option.value} value={option.value}>
                     {option.label}
                   </option>
                 ))}
               </Select>
+            </HStack>
+          </Stack>
+          <View view={view} />
+        </Box>
+        <Box>
+          <Stack spacing={4} direction={{ base: "column", sm: "row" }} justifyContent={"flex-start"} mb={3}>
+            <Text fontSize={{ base: "md", sm: "xl" }} fontWeight={"medium"}>
+              SRC President
+            </Text>
+            <HStack spacing={4}>
+              {view === "table" && (
+                <Select
+                  size="xs"
+                  width={"max-content"}
+                  aria-label="Sort by"
+                  defaultValue={sortByOptions.defaultValue}
+                  focusBorderColor={useColorModeValue("blue.500", "blue.200")}
+                  rounded="md"
+                  borderWidth={1}
+                  borderColor={"gray.800"}
+                  {...props}
+                >
+                  {sortByOptions.options.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </Select>
+              )}
               <Select
                 size="xs"
                 width={"max-content"}

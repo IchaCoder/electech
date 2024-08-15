@@ -121,8 +121,8 @@ const AddEvent = (props: Props) => {
             <Checkbox {...register("is_lock_event")} border={"black"} size={"sm"} defaultChecked={is_lock_event}>
               Lock this event to organization
             </Checkbox>
-            <FormHelperText>
-              Checking this checkbox means only people in your organization can access this event
+            <FormHelperText mt={0}>
+              Locking this event means this event can only be accessed by people in your organization
             </FormHelperText>
             {errors?.is_lock_event && <FormErrorMessage>{errors?.is_lock_event?.message}.</FormErrorMessage>}
           </FormControl>
@@ -140,6 +140,7 @@ const AddEvent = (props: Props) => {
                 })}
               />
               {errors?.org_domain && <FormErrorMessage>{errors?.org_domain?.message}.</FormErrorMessage>}
+              <FormHelperText mt={0}>Only voters with this domain will be able to access this event</FormHelperText>
             </FormControl>
           )}
         </Stack>

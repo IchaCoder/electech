@@ -24,7 +24,7 @@ export const viewOptions = {
   defaultValue: "block-view",
   options: [
     { label: "Block", value: "block" },
-    { label: "Graph", value: "graph" },
+    { label: "Chart", value: "chart" },
     { label: "Table", value: "table" },
   ],
 };
