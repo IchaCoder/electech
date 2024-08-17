@@ -19,9 +19,9 @@ export const nav_links = [
     href: "/dashboard/category",
   },
   {
-    name: "Profile",
+    name: "Account",
     icon: IoPersonOutline,
-    href: "/dashboard/profile",
+    href: "/dashboard/account",
   },
   {
     name: "Settings",

@@ -22,6 +22,8 @@ import { FiEdit2, FiMoreVertical } from "react-icons/fi";
 import DeleteParticipantDialog from "./modal/delete-participant";
 import EditParticipant from "./modal/edit";
 import DeleteCategoryDialog from "./modal/remove-category";
+import { AddCategoryModal } from "./modal/add-category";
+import { AddParticipantDrawer } from "./modal/add-participant";
 
 type Props = {};
 
@@ -39,9 +41,17 @@ const Category = (props: Props) => {
   } = useDisclosure();
 
   const {
-    isOpen: isOpenRemoveCategpry,
-    onOpen: onOpenRemoveCategpry,
-    onClose: onCloseRemoveCategpry,
+    isOpen: isOpenRemoveCategory,
+    onOpen: onOpenRemoveCategory,
+    onClose: onCloseRemoveCategory,
+  } = useDisclosure();
+
+  const { isOpen: isOpenAddCategory, onOpen: onOpenAddCategory, onClose: onCloseAddCategory } = useDisclosure();
+
+  const {
+    isOpen: isOpenAddParticipant,
+    onOpen: onOpenAddParticipant,
+    onClose: onCloseAddParticipant,
   } = useDisclosure();
 
   return (
@@ -50,7 +60,9 @@ const Category = (props: Props) => {
         <DeleteParticipantDialog isOpen={isOpenDeleteParticipant} onClose={onCloseDeleteParticipant} />
       )}
       {isOpenEditParticipant && <EditParticipant isOpen={isOpenEditParticipant} onClose={onCloseEditParticipant} />}
-      {isOpenRemoveCategpry && <DeleteCategoryDialog isOpen={isOpenRemoveCategpry} onClose={onCloseRemoveCategpry} />}
+      {isOpenRemoveCategory && <DeleteCategoryDialog isOpen={isOpenRemoveCategory} onClose={onCloseRemoveCategory} />}
+      {isOpenAddCategory && <AddCategoryModal isOpen={isOpenAddCategory} onClose={onCloseAddCategory} />}
+      {isOpenAddParticipant && <AddParticipantDrawer isOpen={isOpenAddParticipant} onClose={onCloseAddParticipant} />}
       <Box py={8} px={{ base: 0, sm: 4, xl: 12 }}>
         <Stack flexDir={"row"} justifyContent={"space-between"} alignItems={"center"}>
           <Text fontWeight={"bold"} fontSize={{ base: "xl", md: "2xl", lg: "4xl" }}>
@@ -77,19 +89,20 @@ const Category = (props: Props) => {
                 <Button
                   size={{ base: "xs", md: "sm" }}
                   colorScheme="blue"
-                  rounded={"sm"}
+                  rounded={"lg"}
                   leftIcon={<IoMdAdd />}
                   title="Add another participant"
+                  onClick={onOpenAddParticipant}
                 >
                   Add
                 </Button>
                 <Button
                   size={{ base: "xs", md: "sm" }}
                   colorScheme="red"
-                  rounded={"sm"}
+                  rounded={"lg"}
                   leftIcon={<RiDeleteBin6Line />}
                   title="Remove this category"
-                  onClick={onOpenRemoveCategpry}
+                  onClick={onOpenRemoveCategory}
                 >
                   Remove
                 </Button>
@@ -128,6 +141,20 @@ const Category = (props: Props) => {
                   </Text>
                 </Box>
               </SimpleGrid>
+              <Box textAlign="center" mt={8}>
+                <Text fontSize={"lg"} fontWeight={"medium"}>
+                  No Participants found
+                </Text>
+                <Button
+                  bgColor={"rgba(97, 153, 203, 1)"}
+                  color={"white"}
+                  _hover={{ opacity: 0.7 }}
+                  _focus={{ opacity: 0.7 }}
+                  onClick={onOpenAddParticipant}
+                >
+                  Add Participant
+                </Button>
+              </Box>
             </Box>
           </Stack>
           <Stack bgColor={"rgba(155, 214, 232, 0.5)"} py={8} gap={8} px={{ base: 2, sm: 4, xl: 12 }} rounded={"xl"}>
@@ -178,12 +205,11 @@ const Category = (props: Props) => {
             No categories found
           </Text>
           <Button
-            as={Link}
-            href={"/dashboard/add-category"}
             bgColor={"rgba(97, 153, 203, 1)"}
             color={"white"}
             _hover={{ opacity: 0.7 }}
             _focus={{ opacity: 0.7 }}
+            onClick={onOpenAddCategory}
           >
             Add Category
           </Button>
