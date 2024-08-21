@@ -72,6 +72,8 @@ const Nav = () => {
 
           <ButtonGroup display={{ base: "none", md: "flex" }}>
             <Button
+              as={Link}
+              href={"/login"}
               rounded={"full"}
               variant={"outline"}
               bgColor={"transparent"}
@@ -82,7 +84,14 @@ const Nav = () => {
             >
               Login
             </Button>
-            <Button rounded={"full"} bgColor={"brand.primary"} color={"white"} _hover={{ opacity: 0.7 }}>
+            <Button
+              as={Link}
+              href={"/signup"}
+              rounded={"full"}
+              bgColor={"brand.primary"}
+              color={"white"}
+              _hover={{ opacity: 0.7 }}
+            >
               Signup
             </Button>
           </ButtonGroup>

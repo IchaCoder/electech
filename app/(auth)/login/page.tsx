@@ -3,8 +3,8 @@ import React from "react";
 
 type Props = {};
 
-const SignupPage = (props: Props) => {
+const LoginPage = (props: Props) => {
   return <Login />;
 };
 
-export default SignupPage;
+export default LoginPage;
