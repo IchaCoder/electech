@@ -47,7 +47,7 @@ export const SignInForm = (props: StackProps) => {
           <LogoIcon width={"200px"} />
         </Box>
         <Stack spacing={{ base: "2", md: "3" }} textAlign="center">
-          <Heading size={{ base: "md", md: "lg" }}>Signup to your account</Heading>
+          <Heading size={{ base: "md", md: "lg" }}>Signup</Heading>
           <Text color="fg.muted">
             Already have an account?{" "}
             <Link href="/login" color={"brand.primary"}>
@@ -94,7 +94,7 @@ export const SignInForm = (props: StackProps) => {
                 {...register("phone", {
                   required: "Phone is required",
                   pattern: {
-                    value: /^[0-9]{11}$/,
+                    value: /^[0-9]{10,}$/,
                     message: "Invalid phone number",
                   },
                 })}
@@ -129,6 +129,7 @@ export const SignInForm = (props: StackProps) => {
                   })}
                 />
               </InputGroup>{" "}
+              {errors.password && <FormErrorMessage fontSize="sm">{errors.password.message}</FormErrorMessage>}
             </FormControl>
           </Stack>
           <HStack justify="space-between">
