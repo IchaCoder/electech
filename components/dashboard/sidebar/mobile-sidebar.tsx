@@ -35,7 +35,7 @@ const MobileSidebar = ({ isOpen, onClose }: Props) => {
 
         <DrawerBody>
           <Stack px={{ base: 5, lg: 8 }} my={4} display={{ base: "flex", md: "none" }} position={"relative"}>
-            {nav_links.map((link, index) => (
+            {nav_links.voter.map((link, index) => (
               <Stack flexDir={"row"} gap={".25rem"} key={index}>
                 <Link
                   href={link.href}

@@ -1,12 +1,14 @@
 "use client";
-import AdminDasboard from "./admin";
+import AdminDashboard from "./admin";
+import VoterDashboard from "./user";
 
 type Props = {};
 
 const Events = (props: Props) => {
   return (
     <>
-      <AdminDasboard />
+      {/* <AdminDashboard /> */}
+      <VoterDashboard />
     </>
   );
 };

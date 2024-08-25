@@ -5,7 +5,7 @@ import Link from "next/link";
 
 type Props = {};
 
-const AdminDasboard = (props: Props) => {
+const AdminDashboard = (props: Props) => {
   return (
     <Box py={8} px={{ base: 0, sm: 4, xl: 12 }}>
       <Stack
@@ -71,4 +71,4 @@ const AdminDasboard = (props: Props) => {
   );
 };
 
-export default AdminDasboard;
+export default AdminDashboard;
