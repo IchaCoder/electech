@@ -1,0 +1,46 @@
+"use client";
+import { Box, Text, Stack } from "@chakra-ui/react";
+import React from "react";
+import CountDown from "../dashboard/home/count-down-timer/count-down";
+import CustomRadio from "./card-group";
+
+type Props = {};
+
+const Voting = (props: Props) => {
+  return (
+    <Box bgColor={"brand.primary"} minH={"100vh"} py={10}>
+      <Box maxW={"1000px"} mx={"auto"} px={{ base: 4, sm: 8 }} py={12} bgColor={"#f4f4f4"} rounded={"2xl"}>
+        <Text fontWeight={"bold"} fontSize={{ base: "xl", lg: "3xl" }}>
+          UG SRC General Elections - 2024
+        </Text>
+        <Stack flexDir={"row"} gap={10}>
+          <Stack>
+            <Text fontSize={"lg"} fontWeight={"bold"}>
+              Start Date
+            </Text>
+            <Text>9th June 2024 - 09:00 AM</Text>
+          </Stack>
+          <Stack>
+            <Text fontSize={"lg"} fontWeight={"bold"}>
+              Due Date
+            </Text>
+            <Text>9th June 2024 - 07:00 AM</Text>
+          </Stack>
+        </Stack>
+        <CountDown />
+        <Stack>
+          <Stack bgColor={"rgba(155, 214, 232, 0.5)"} py={8} gap={8} px={{ base: 2, sm: 4, xl: 12 }} rounded={"xl"}>
+            <Stack flexDir={"row"} justifyContent={"space-between"}>
+              <Text fontSize={"lg"} fontWeight={"medium"} textAlign={"center"}>
+                SRC President
+              </Text>
+              <CustomRadio />
+            </Stack>
+          </Stack>
+        </Stack>
+      </Box>
+    </Box>
+  );
+};
+
+export default Voting;
