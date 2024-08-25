@@ -28,12 +28,20 @@ const Voting = (props: Props) => {
           </Stack>
         </Stack>
         <CountDown />
-        <Stack>
+        <Stack spacing={4}>
           <Stack bgColor={"rgba(155, 214, 232, 0.5)"} py={8} gap={8} px={{ base: 2, sm: 4, xl: 12 }} rounded={"xl"}>
-            <Stack flexDir={"row"} justifyContent={"space-between"}>
-              <Text fontSize={"lg"} fontWeight={"medium"} textAlign={"center"}>
-                SRC President
-              </Text>
+            <Text fontSize={"xl"} fontWeight={"medium"}>
+              SRC President
+            </Text>
+            <Stack mt={8} borderColor={"black"}>
+              <CustomRadio />
+            </Stack>
+          </Stack>
+          <Stack bgColor={"rgba(155, 214, 232, 0.5)"} py={8} gap={8} px={{ base: 2, sm: 4, xl: 12 }} rounded={"xl"}>
+            <Text fontSize={"xl"} fontWeight={"medium"}>
+              SRC General Secretary
+            </Text>
+            <Stack mt={8} borderColor={"black"}>
               <CustomRadio />
             </Stack>
           </Stack>

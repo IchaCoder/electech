@@ -66,21 +66,25 @@ export const RadioCard = (props: RadioCardProps) => {
       as="label"
       cursor="pointer"
       {...labelProps}
-      borderWidth={1}
-      p={3}
-      borderRadius={".5rem"}
+      shadow={"md"}
+      p={12}
+      pr={"2.5rem"}
+      width={"max-content"}
+      bgColor={"white"}
+      borderRadius={"xl"}
       borderColor={state.isChecked ? "blue.600" : "gray.200"}
+      borderWidth={3}
     >
       <input {...inputProps} aria-labelledby={id} />
       <Box sx={styles} {...checkboxProps} {...rest}>
         <Stack direction="row">
-          <Box flex="1">{children}</Box>
+          <Box>{children}</Box>
           {state.isChecked ? (
-            <Circle bg="blue.600" size="4">
+            <Circle bg="blue.600" size="6">
               <Icon as={CheckIcon} boxSize="2.5" color="white" />
             </Circle>
           ) : (
-            <Circle borderWidth="2px" size="4" />
+            <Circle borderWidth="2px" size="6" />
           )}
         </Stack>
       </Box>
