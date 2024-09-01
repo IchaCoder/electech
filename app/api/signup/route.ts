@@ -4,7 +4,6 @@ import User, { IUser } from "@/models/User";
 import { AuthResponseType } from "@/types/auth";
 import argon2 from "argon2";
 import jwt from "jsonwebtoken";
-import { generateOTP } from "@/lib/helpers";
 
 export const POST = async (request: NextRequest) => {
   const { name, email, phone, password, role } = (await request.json()) as IUser;
@@ -14,6 +13,10 @@ export const POST = async (request: NextRequest) => {
   try {
     // Argon2id is the default variant
     const hashedPassword = await argon2.hash(password);
+    // update the name of a field we want to rename programmatically
+    // const u = await User.updateMany({}, { $rename: { verfied: "is_verified" } });
+    // console.log(u);
+
     const user = await User.create({
       name,
       email,

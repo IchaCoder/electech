@@ -4,11 +4,12 @@ import { otpResponse } from "./generate-otp";
 
 type ConfirmOtpType = {
   otp: string;
-  phone: string;
+  number: string;
 };
 const ConfirmOtp = async (data: ConfirmOtpType) => {
   const finalData = {
-    ...data,
+    code: data.otp,
+    number: data.number,
     api_key: process.env.SMS_API_KEY,
   };
 
@@ -22,6 +23,10 @@ const ConfirmOtp = async (data: ConfirmOtpType) => {
       body: JSON.stringify(finalData),
     });
     const res = await response.json();
+    console.log(res);
+    if (res.code === "1105") {
+      return { message: "Code expired", status: "error" };
+    }
     return { ...res, status: "success" } as otpResponse & { status: "success" };
   } catch (error: any) {
     console.log(error);

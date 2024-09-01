@@ -26,6 +26,7 @@ import { url } from "@/lib/helpers";
 import { AuthResponseType } from "@/types/auth";
 import { IUser } from "@/models/User";
 import { useRouter } from "next/navigation";
+import { generateOTP } from "@/app/actions/otp/generate-otp";
 
 type FormValueTypes = {
   email: string;
@@ -57,10 +58,11 @@ export const SignInForm = (props: StackProps) => {
       body: JSON.stringify(data),
     });
     const { message, token, status } = (await res.json()) as AuthResponseType<Partial<IUser>>;
-    // const res = await generateOTP();
+    await generateOTP(data.phone);
 
     toast({
       title: message,
+      description: "Please verify your account",
       status,
       duration: 3000,
       position: "top-right",

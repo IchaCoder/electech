@@ -27,10 +27,10 @@ export const Verify = (props: StackProps) => {
 
   const onSubmit = async () => {
     setIsLoading(true);
-    const { status, message } = await ConfirmOtp({ otp, phone: "+23333333" });
+    const { status, message } = await ConfirmOtp({ otp, number: "233555543385" });
 
     if (status === "success") {
-      const { status, message } = await VerifyAccount("+23333333");
+      const { status, message } = await VerifyAccount("ichabordyeboah247@gmail.com");
       toast({
         title: status === "success" ? "Success" : "Error",
         description: message,
@@ -38,7 +38,7 @@ export const Verify = (props: StackProps) => {
         duration: 3000,
         isClosable: true,
       });
-      router.push("/dasboard");
+      router.push("/dashboard");
     } else {
       toast({
         title: "Error",
@@ -71,6 +71,8 @@ export const Verify = (props: StackProps) => {
         <Stack spacing="6">
           <HStack>
             <PinInput type="alphanumeric" onChange={(e) => setOpt(e)}>
+              <PinInputField />
+              <PinInputField />
               <PinInputField />
               <PinInputField />
               <PinInputField />
