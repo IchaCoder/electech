@@ -29,7 +29,7 @@ export function ConfirmVoteModal({ isOpen, onClose }: Props) {
           <Text>An OTP has been sent to your email and phone number</Text>
           <Text>Please confirm to coninue</Text>
           <HStack mt="2">
-            <PinInput type="alphanumeric">
+            <PinInput type="number">
               <PinInputField />
               <PinInputField />
               <PinInputField />

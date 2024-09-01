@@ -1,6 +1,6 @@
 export interface AuthResponseType<U> {
   message: string;
   token?: string;
-  status: string;
+  status: "success" | "error";
   user?: U;
 }

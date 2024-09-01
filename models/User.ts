@@ -7,6 +7,7 @@ export interface IUser extends mongoose.Document {
   phone: string;
   role: string;
   password: string;
+  is_verified: boolean;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -33,6 +34,10 @@ const UserSchema = new mongoose.Schema<IUser>(
       type: String,
       enum: ["user", "admin"],
       default: "user",
+    },
+    is_verified: {
+      type: Boolean,
+      default: false,
     },
     password: {
       type: String,

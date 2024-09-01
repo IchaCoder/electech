@@ -20,7 +20,7 @@ import { IoMdAdd } from "react-icons/io";
 import Link from "next/link";
 import { FiEdit2, FiMoreVertical } from "react-icons/fi";
 import DeleteParticipantDialog from "./modal/delete-participant";
-import EditParticipant from "./modal/edit";
+import EditParticipant from "./modal/edit-participant";
 import DeleteCategoryDialog from "./modal/remove-category";
 import { AddCategoryModal } from "./modal/add-category";
 import { AddParticipantDrawer } from "./modal/add-participant";
@@ -69,12 +69,11 @@ const Category = (props: Props) => {
             Categories
           </Text>
           <Button
-            as={Link}
-            href={"/dashboard/add-category"}
             bgColor={"rgba(97, 153, 203, 1)"}
             color={"white"}
             _hover={{ opacity: 0.7 }}
             _focus={{ opacity: 0.7 }}
+            onClick={onOpenAddCategory}
           >
             Add Category
           </Button>

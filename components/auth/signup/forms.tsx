@@ -16,11 +16,16 @@ import {
   Text,
   useColorModeValue,
   useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
 import LogoIcon from "@/app/icons/logo";
 import { Link } from "@chakra-ui/next-js";
 import { HiEye, HiEyeOff } from "react-icons/hi";
 import { useForm } from "react-hook-form";
+import { url } from "@/lib/helpers";
+import { AuthResponseType } from "@/types/auth";
+import { IUser } from "@/models/User";
+import { useRouter } from "next/navigation";
 
 type FormValueTypes = {
   email: string;
@@ -32,15 +37,40 @@ type FormValueTypes = {
 
 export const SignInForm = (props: StackProps) => {
   const { isOpen, onToggle } = useDisclosure();
+  const toast = useToast();
+  const router = useRouter();
 
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
+    reset,
   } = useForm<FormValueTypes>();
 
-  const onSubmit = (data: FormValueTypes) => {
+  const onSubmit = async (data: FormValueTypes) => {
     console.log(data);
+    const res = await fetch(`${url}/api/signup`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+    const { message, token, status } = (await res.json()) as AuthResponseType<Partial<IUser>>;
+    // const res = await generateOTP();
+
+    toast({
+      title: message,
+      status,
+      duration: 3000,
+      position: "top-right",
+    });
+
+    if (status === "success") {
+      localStorage.setItem("e_token", token!);
+      router.push("/verify");
+      reset();
+    }
   };
 
   return (
@@ -157,8 +187,8 @@ export const SignInForm = (props: StackProps) => {
                   required: "Role is required",
                 })}
               >
-                <option value={"organizer"}>Organizer</option>
-                <option value={"voter"}>Voter</option>
+                <option value={"admin"}>Organizer</option>
+                <option value={"user"}>Voter</option>
               </Select>
               {errors.role && <FormErrorMessage fontSize="sm">{errors.role.message}</FormErrorMessage>}
             </FormControl>

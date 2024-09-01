@@ -7,8 +7,8 @@ type Props = {};
 const Events = (props: Props) => {
   return (
     <>
-      {/* <AdminDashboard /> */}
-      <VoterDashboard />
+      <AdminDashboard />
+      {/* <VoterDashboard /> */}
     </>
   );
 };

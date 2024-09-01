@@ -4,6 +4,7 @@ import User, { IUser } from "@/models/User";
 import { AuthResponseType } from "@/types/auth";
 import argon2 from "argon2";
 import jwt from "jsonwebtoken";
+import { generateOTP } from "@/lib/helpers";
 
 export const POST = async (request: NextRequest) => {
   const { name, email, phone, password, role } = (await request.json()) as IUser;
@@ -20,7 +21,10 @@ export const POST = async (request: NextRequest) => {
       password: hashedPassword,
       role,
     });
-    const token = jwt.sign({ userId: user._id, name: user.name }, process.env.JWT_SECRET!, { expiresIn: "1h" });
+    const token = jwt.sign({ userId: user._id, name: user.name }, process.env.JWT_SECRET!, { expiresIn: "5h" });
+
+    // const res = await generateOTP();
+    // console.log(res);
 
     return NextResponse.json<AuthResponseType<Partial<IUser>>>(
       {
