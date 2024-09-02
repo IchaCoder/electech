@@ -15,7 +15,7 @@ import LogoIcon from "@/app/icons/logo";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import ConfirmOtp from "@/app/actions/otp/confirm-otp";
-import { VerifyAccount } from "@/app/actions/verify-account";
+import { VerifyAccount } from "@/app/actions/auth/verify-account";
 
 export const Verify = (props: StackProps) => {
   const router = useRouter();

@@ -1,6 +1,6 @@
 "use client";
 import { Box, Button, Stack, Text, Tooltip, useToast } from "@chakra-ui/react";
-import React from "react";
+import React, { useState } from "react";
 import CountDown from "./count-down-timer/count-down";
 import { Stats } from "./stats";
 import { FaRegCopy } from "react-icons/fa6";
@@ -8,6 +8,7 @@ import { FaRegCopy } from "react-icons/fa6";
 type Props = {};
 
 const Home = (props: Props) => {
+  const [isShowCountdown, setIsShowCountdown] = useState(true);
   const toast = useToast();
 
   return (
@@ -49,7 +50,7 @@ const Home = (props: Props) => {
           <Text>9th June 2024 - 07:00 AM</Text>
         </Stack>
       </Stack>
-      <CountDown />
+      {isShowCountdown && <CountDown setIsShowCountDown={setIsShowCountdown} />}
       <Stats />
     </Box>
   );

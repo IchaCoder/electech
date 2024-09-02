@@ -22,7 +22,7 @@ const Sidebar = () => {
         Sign Out
       </Button>
       {pathname !== "/dashboard" ? (
-        nav_links.voter.map((link, index) => (
+        nav_links.admin.map((link, index) => (
           <Stack flexDir={"row"} gap={".25rem"} key={index}>
             <Link
               href={link.href}

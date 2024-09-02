@@ -1,14 +1,15 @@
 import mongoose from "mongoose";
 
 export interface IUser extends mongoose.Document {
+  _id?: string;
   name: string;
   email: string;
   phone: string;
   role: string;
   password: string;
   is_verified: boolean;
-  createdAt?: Date;
-  updatedAt?: Date;
+  created_at?: string;
+  updated_at?: string;
 }
 
 /* UserSchema will correspond to a collection in your MongoDB database. */

@@ -1,5 +1,8 @@
 "use client";
+import { AddEventRequest } from "@/app/actions/event/add";
 import { DatePicker } from "@/components/ui/date-picker";
+import { getTokenFromLocalStorage } from "@/lib/helpers";
+import { IEvent } from "@/models/Event";
 import {
   Box,
   Button,
@@ -11,6 +14,7 @@ import {
   Input,
   Stack,
   Text,
+  useToast,
 } from "@chakra-ui/react";
 import React from "react";
 import { useForm } from "react-hook-form";
@@ -28,6 +32,7 @@ type FormValueTypes = {
 };
 
 const AddEvent = (props: Props) => {
+  const toast = useToast();
   const {
     handleSubmit,
     register,
@@ -36,12 +41,24 @@ const AddEvent = (props: Props) => {
     setValue,
     setError,
     clearErrors,
+    reset,
   } = useForm<FormValueTypes>({ defaultValues: { is_lock_event: false } });
 
   const [start_date, due_date, is_lock_event] = watch(["start_date", "due_date", "is_lock_event"]);
 
-  const onSubmit = (data: FormValueTypes) => {
-    console.log(data);
+  const onSubmit = async (data: FormValueTypes) => {
+    const token = getTokenFromLocalStorage();
+    const { message, status } = await AddEventRequest(data as unknown as IEvent, token!);
+    toast({
+      title: message,
+      status: status,
+      duration: 5000,
+      isClosable: true,
+      position: "top-right",
+    });
+    if (status === "success") {
+      reset();
+    }
   };
 
   return (
