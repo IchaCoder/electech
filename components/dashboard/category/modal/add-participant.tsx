@@ -21,6 +21,9 @@ import { useRef } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { IoMdAdd } from "react-icons/io";
 import { CloseIcon } from "@chakra-ui/icons";
+import { IParticipant } from "@/models/Category";
+import { AddParticipantRequest } from "@/app/actions/participant/add";
+import { getTokenFromLocalStorage } from "@/lib/helpers";
 
 type Props = {
   isOpen: boolean;
@@ -54,10 +57,6 @@ export function AddParticipantDrawer({ isOpen, onClose }: Props) {
     control,
     register,
     formState: { errors, isSubmitting },
-    watch,
-    setValue,
-    setError,
-    clearErrors,
   } = useForm<ParticipantType>({
     defaultValues: { participants: [defaultParticipantValues] },
   });
@@ -75,8 +74,18 @@ export function AddParticipantDrawer({ isOpen, onClose }: Props) {
     });
   };
 
-  const onSubmit = (data: ParticipantType) => {
-    console.log(data);
+  const onSubmit = async (data: ParticipantType) => {
+    const participants = data.participants as unknown as IParticipant[];
+
+    const token = getTokenFromLocalStorage();
+    const { message, status } = await AddParticipantRequest("66d541d0022edc3ef84f9668", token!, participants);
+    toast({
+      title: message,
+      status: status,
+      duration: 3000,
+      isClosable: true,
+      position: "top-right",
+    });
   };
 
   return (
@@ -180,7 +189,7 @@ export function AddParticipantDrawer({ isOpen, onClose }: Props) {
             <Button variant="outline" mr={3} onClick={onClose}>
               Cancel
             </Button>
-            <Button type="submit" colorScheme="blue">
+            <Button type="submit" isLoading={isSubmitting} colorScheme="blue">
               Save
             </Button>
           </DrawerFooter>

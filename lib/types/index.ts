@@ -28,3 +28,9 @@ export type ParticipantType = {
   added_at: string;
   updated_at: string;
 };
+
+export interface API_RESPONSE<T> {
+  message: string;
+  status: "success" | "error";
+  data: T;
+}

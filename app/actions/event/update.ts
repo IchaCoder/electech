@@ -9,10 +9,11 @@ export const UpdateEvent = async (data: Partial<IEvent>, token: string) => {
   if (!token) {
     return { message: "Token not found", status: "error" } as AuthResponseType<any>;
   }
-  await dbConnect();
 
   try {
     const payload = jwt.verify(token, process.env.JWT_SECRET!) as PayloadType;
+
+    await dbConnect();
 
     const event = await Event.findByIdAndUpdate({ _id: payload.userId }, data, {
       new: true,

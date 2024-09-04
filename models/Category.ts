@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import Participant, { IParticipant } from "./Participant";
 
 export interface ICategory extends mongoose.Document {
   _id?: string;
@@ -10,7 +9,42 @@ export interface ICategory extends mongoose.Document {
   updatedA_at?: string;
 }
 
-const CategorySchema = new mongoose.Schema(
+export interface IParticipant extends mongoose.Document {
+  _id: string;
+  imageUrl?: string;
+  first_name: string;
+  middle_name?: string;
+  last_name: string;
+  created_at?: string;
+  updated_at?: string;
+}
+
+const ParticipantSchema = new mongoose.Schema<IParticipant>(
+  {
+    imageUrl: {
+      type: String,
+    },
+    first_name: {
+      type: String,
+      required: true,
+    },
+    middle_name: {
+      type: String,
+    },
+    last_name: {
+      type: String,
+      required: true,
+    },
+  },
+  {
+    timestamps: {
+      createdAt: "created_at",
+      updatedAt: "updated_at",
+    },
+  }
+);
+
+const CategorySchema = new mongoose.Schema<ICategory>(
   {
     title: {
       type: String,
@@ -21,7 +55,10 @@ const CategorySchema = new mongoose.Schema(
       ref: "Event",
       required: true,
     },
-    participants: [Participant],
+    participants: {
+      type: [ParticipantSchema],
+      default: [],
+    },
   },
   {
     timestamps: {

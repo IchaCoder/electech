@@ -6,17 +6,20 @@ import { PayloadType } from "@/types";
 import { AuthResponseType } from "@/types/auth";
 import jwt from "jsonwebtoken";
 
-const AddCategoryRequest = async (data: Partial<ICategory>, token: string) => {
+const AddCategoryRequest = async (data: Partial<ICategory>[], token: string) => {
   if (!token) {
     return { message: "Token not found", status: "error" } as AuthResponseType<any>;
   }
-  await dbConnect();
 
   try {
     // Check if token from local storage is valid
     const payload = jwt.verify(token, process.env.JWT_SECRET!) as PayloadType;
 
-    await Category.create({ ...data, added_by: payload.userId });
+    await dbConnect();
+
+    data.forEach(async (category) => {
+      await Category.create({ ...category, added_by: payload.userId });
+    });
 
     return { message: "Category created successfully", status: "success" } as AuthResponseType<any>;
   } catch (error: any) {

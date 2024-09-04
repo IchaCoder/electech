@@ -10,10 +10,11 @@ export const UpdateCategory = async (data: Partial<ICategory>, token: string) =>
   if (!token) {
     return { message: "Token not found", status: "error" } as AuthResponseType<any>;
   }
-  await dbConnect();
 
   try {
     const payload = jwt.verify(token, process.env.JWT_SECRET!) as PayloadType;
+
+    await dbConnect();
 
     await Category.findByIdAndUpdate({ _id: payload.userId }, data, {
       new: true,

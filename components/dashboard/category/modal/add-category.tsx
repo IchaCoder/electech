@@ -39,15 +39,13 @@ export function AddCategoryModal({ isOpen, onClose }: Props) {
     });
 
     const token = getTokenFromLocalStorage();
-    categoriesArray.forEach(async (category) => {
-      const { message, status } = await AddCategoryRequest(category, token!);
-      toast({
-        title: message,
-        status: status,
-        duration: 3000,
-        isClosable: true,
-        position: "top-right",
-      });
+    const { message, status } = await AddCategoryRequest(categoriesArray, token!);
+    toast({
+      title: message,
+      status: status,
+      duration: 3000,
+      isClosable: true,
+      position: "top-right",
     });
     onClose();
     setCategories("");

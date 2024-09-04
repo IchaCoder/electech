@@ -1,6 +1,7 @@
 // app/providers.tsx
 "use client";
 
+import { UserProvider } from "@/context/user.context";
 import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 import { AppProgressBar as ProgressBar } from "next-nprogress-bar";
 
@@ -18,8 +19,10 @@ const theme = extendTheme({ colors });
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <ChakraProvider theme={theme}>
-      {children}
-      <ProgressBar height="4px" color={colors.brand.primary} options={{ showSpinner: true }} shallowRouting />
+      <UserProvider>
+        {children}
+        <ProgressBar height="4px" color={colors.brand.primary} options={{ showSpinner: true }} shallowRouting />
+      </UserProvider>
     </ChakraProvider>
   );
 }

@@ -11,11 +11,11 @@ export const AddEventRequest = async (data: IEvent, token: string) => {
     return { message: "Token not found", status: "error" } as AuthResponseType<any>;
   }
 
-  await dbConnect();
-
   try {
     // Check if token from local storage is valid
     const payload = jwt.verify(token, process.env.JWT_SECRET!) as PayloadType;
+
+    await dbConnect();
 
     await Event.create({ ...data, added_by: payload.userId });
 

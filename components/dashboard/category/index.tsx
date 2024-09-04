@@ -24,6 +24,7 @@ import EditParticipant from "./modal/edit-participant";
 import DeleteCategoryDialog from "./modal/remove-category";
 import { AddCategoryModal } from "./modal/add-category";
 import { AddParticipantDrawer } from "./modal/add-participant";
+import { useUser } from "@/context/user.context";
 
 type Props = {};
 
