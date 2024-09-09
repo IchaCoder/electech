@@ -32,8 +32,8 @@ export const POST = async (req: NextRequest) => {
         { status: 401 }
       );
     }
-
-    const token = jwt.sign({ userId: user._id, name: user.name }, process.env.JWT_SECRET!, { expiresIn: "1h" });
+    // TO DO: Change token expiration to 1h
+    const token = jwt.sign({ userId: user._id, name: user.name }, process.env.JWT_SECRET!, { expiresIn: "30d" });
 
     return NextResponse.json<AuthResponseType<Partial<IUser>>>(
       {

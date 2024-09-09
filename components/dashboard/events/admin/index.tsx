@@ -1,11 +1,28 @@
-import { Badge, Box, Button, Card, FormControl, FormHelperText, Input, Stack, Text, chakra } from "@chakra-ui/react";
+import {
+  Badge,
+  Box,
+  Button,
+  Card,
+  FormControl,
+  FormHelperText,
+  Input,
+  Skeleton,
+  Stack,
+  Text,
+  chakra,
+} from "@chakra-ui/react";
 import { Image } from "@chakra-ui/next-js";
 import EventList from "../event-list";
 import Link from "next/link";
+import { API_RESPONSE } from "@/lib/types";
+import { IEvent } from "@/models/Event";
 
-type Props = {};
+type Props = {
+  data: API_RESPONSE<IEvent[]>;
+  isLoading: boolean;
+};
 
-const AdminDashboard = (props: Props) => {
+const AdminDashboard = ({ data, isLoading }: Props) => {
   return (
     <Box py={8} px={{ base: 0, sm: 4, xl: 12 }}>
       <Stack
@@ -51,22 +68,33 @@ const AdminDashboard = (props: Props) => {
           Search
         </Button>
       </Stack>
-      <EventList />
-      <Box textAlign="center" mt={8}>
-        <Text fontSize={{ base: "xl", xl: "2xl" }} fontWeight={"bold"}>
-          No event found
-        </Text>
-        <Button
-          as={Link}
-          href={"/dashboard/add-event"}
-          bgColor={"rgba(97, 153, 203, 1)"}
-          color={"white"}
-          _hover={{ opacity: 0.7 }}
-          _focus={{ opacity: 0.7 }}
-        >
-          Add Event
-        </Button>
-      </Box>
+      {isLoading ? (
+        <Stack>
+          {Array(3)
+            .fill(0)
+            .map((_, index) => (
+              <Skeleton key={index} height={"30px"} />
+            ))}
+        </Stack>
+      ) : data?.data?.length === 0 ? (
+        <Box textAlign="center" mt={8}>
+          <Text fontSize={{ base: "xl", xl: "2xl" }} fontWeight={"bold"}>
+            No event found
+          </Text>
+          <Button
+            as={Link}
+            href={"/dashboard/add-event"}
+            bgColor={"rgba(97, 153, 203, 1)"}
+            color={"white"}
+            _hover={{ opacity: 0.7 }}
+            _focus={{ opacity: 0.7 }}
+          >
+            Add Event
+          </Button>
+        </Box>
+      ) : (
+        <EventList data={data?.data} />
+      )}
     </Box>
   );
 };
