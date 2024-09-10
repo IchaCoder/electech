@@ -13,7 +13,6 @@ const EventHomePage = async ({ params }: Props) => {
   if (message === "not-found") {
     notFound();
   }
-  console.log(data);
 
   return <Home data={data} />;
 };

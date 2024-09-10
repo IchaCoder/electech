@@ -14,6 +14,7 @@ type Props = {
 const Home = ({ data }: Props) => {
   const [isShowCountdown, setIsShowCountdown] = useState(true);
   const toast = useToast();
+  console.log(data.is_ended);
 
   const year = new Date(data?.start_date).getFullYear();
 
@@ -70,7 +71,9 @@ const Home = ({ data }: Props) => {
           </Text>
         </Stack>
       </Stack>
-      {isShowCountdown && <CountDown setIsShowCountDown={setIsShowCountdown} eventId={data?._id!} />}
+      {isShowCountdown && (
+        <CountDown isEnded={data?.is_ended} setIsShowCountDown={setIsShowCountdown} eventId={data?._id!} />
+      )}
       <Stats />
     </Box>
   );
