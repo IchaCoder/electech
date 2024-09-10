@@ -5,17 +5,11 @@ import { AuthResponseType } from "@/types/auth";
 import { PayloadType } from "@/types";
 import jwt from "jsonwebtoken";
 
-export const UpdateEvent = async (data: Partial<IEvent>, token: string) => {
-  if (!token) {
-    return { message: "Token not found", status: "error" } as AuthResponseType<any>;
-  }
-
+export const UpdateEvent = async (data: Partial<IEvent>, id: string) => {
   try {
-    const payload = jwt.verify(token, process.env.JWT_SECRET!) as PayloadType;
-
     await dbConnect();
 
-    const event = await Event.findByIdAndUpdate({ _id: payload.userId }, data, {
+    const event = await Event.findByIdAndUpdate({ _id: id }, data, {
       new: true,
       runValidators: true,
     });

@@ -1,5 +1,6 @@
 import { GetEvent } from "@/app/actions/event/get";
 import Home from "@/components/dashboard/home";
+import { notFound } from "next/navigation";
 
 type Props = {
   params: {
@@ -9,9 +10,12 @@ type Props = {
 
 const EventHomePage = async ({ params }: Props) => {
   const { status, data, message } = await GetEvent(params.id);
-  console.log(data.title);
+  if (message === "not-found") {
+    notFound();
+  }
+  console.log(data);
 
-  return <Home />;
+  return <Home data={data} />;
 };
 
 export default EventHomePage;

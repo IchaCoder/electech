@@ -9,6 +9,10 @@ export const GetEvent = async (id: string) => {
     await dbConnect();
 
     const event = await Event.findById(id);
+    console.log("event", event);
+    if (!event) {
+      return { message: "not-found", status: "error" } as API_RESPONSE<IEvent>;
+    }
 
     return { message: "Event fetched successfully", status: "success", data: event } as API_RESPONSE<IEvent>;
   } catch (error) {

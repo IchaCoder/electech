@@ -4,18 +4,24 @@ import React, { useState } from "react";
 import CountDown from "./count-down-timer/count-down";
 import { Stats } from "./stats";
 import { FaRegCopy } from "react-icons/fa6";
+import { IEvent } from "@/models/Event";
+import { convertTimeToAMOrPM } from "@/lib/helpers";
 
-type Props = {};
+type Props = {
+  data: IEvent;
+};
 
-const Home = (props: Props) => {
+const Home = ({ data }: Props) => {
   const [isShowCountdown, setIsShowCountdown] = useState(true);
   const toast = useToast();
+
+  const year = new Date(data?.start_date).getFullYear();
 
   return (
     <Box py={8} px={{ base: 0, sm: 4, xl: 12 }}>
       <Stack flexDir={"row"} justifyContent={"space-between"}>
         <Text fontWeight={"bold"} fontSize={{ base: "xl", lg: "3xl" }}>
-          UG SRC General Elections - 2024
+          {data?.title} - {year}
         </Text>
         <Tooltip hasArrow label="Copy link to share to voters" bg="gray.600">
           <Button
@@ -41,16 +47,30 @@ const Home = (props: Props) => {
           <Text fontSize={"lg"} fontWeight={"bold"}>
             Start Date
           </Text>
-          <Text>9th June 2024 - 09:00 AM</Text>
+          <Text>
+            {new Date(data?.start_date).toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}{" "}
+            - {convertTimeToAMOrPM(data?.start_time)}
+          </Text>
         </Stack>
         <Stack>
           <Text fontSize={"lg"} fontWeight={"bold"}>
             Due Date
           </Text>
-          <Text>9th June 2024 - 07:00 AM</Text>
+          <Text>
+            {new Date(data?.due_date).toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}{" "}
+            - {convertTimeToAMOrPM(data?.due_time)}
+          </Text>
         </Stack>
       </Stack>
-      {isShowCountdown && <CountDown setIsShowCountDown={setIsShowCountdown} />}
+      {isShowCountdown && <CountDown setIsShowCountDown={setIsShowCountdown} eventId={data?._id!} />}
       <Stats />
     </Box>
   );
