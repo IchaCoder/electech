@@ -15,6 +15,7 @@ export interface IParticipant extends mongoose.Document {
   first_name: string;
   middle_name?: string;
   last_name: string;
+  total_votes?: number;
   created_at?: string;
   updated_at?: string;
 }
@@ -34,6 +35,10 @@ const ParticipantSchema = new mongoose.Schema<IParticipant>(
     last_name: {
       type: String,
       required: true,
+    },
+    total_votes: {
+      type: Number,
+      default: 0,
     },
   },
   {

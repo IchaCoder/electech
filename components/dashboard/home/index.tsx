@@ -1,11 +1,13 @@
 "use client";
-import { Box, Button, Stack, Text, Tooltip, useToast } from "@chakra-ui/react";
+import { Box, Button, Skeleton, Stack, Text, Tooltip, useToast } from "@chakra-ui/react";
 import React, { useState } from "react";
 import CountDown from "./count-down-timer/count-down";
 import { Stats } from "./stats";
 import { FaRegCopy } from "react-icons/fa6";
 import { IEvent } from "@/models/Event";
-import { convertTimeToAMOrPM } from "@/lib/helpers";
+import { convertTimeToAMOrPM, getTokenFromLocalStorage } from "@/lib/helpers";
+import { useConditionalFetchData } from "@/hooks/useFetchData";
+import { ICategory } from "@/models/Category";
 
 type Props = {
   data: IEvent;
@@ -14,7 +16,14 @@ type Props = {
 const Home = ({ data }: Props) => {
   const [isShowCountdown, setIsShowCountdown] = useState(true);
   const toast = useToast();
-  console.log(data.is_ended);
+
+  const token = getTokenFromLocalStorage();
+  const {
+    data: categories,
+    isLoading,
+    error,
+  } = useConditionalFetchData<ICategory[]>({ endpoint: `categories?event_id=${data?._id}`, token: token! });
+  console.log(categories);
 
   const year = new Date(data?.start_date).getFullYear();
 
@@ -74,7 +83,31 @@ const Home = ({ data }: Props) => {
       {isShowCountdown && (
         <CountDown isEnded={data?.is_ended} setIsShowCountDown={setIsShowCountdown} eventId={data?._id!} />
       )}
-      <Stats />
+      {isLoading ? (
+        <Stack>
+          <Skeleton height="30px" />
+          <Skeleton height="30px" />
+          <Skeleton height="30px" />
+          <Skeleton height="30px" />
+        </Stack>
+      ) : categories?.data?.length === 0 ? (
+        <Box textAlign="center" mt={8}>
+          <Text fontSize={"lg"} fontWeight={"medium"}>
+            No Categories or Participants found
+          </Text>
+          <Button bgColor={"rgba(97, 153, 203, 1)"} color={"white"} _hover={{ opacity: 0.7 }} _focus={{ opacity: 0.7 }}>
+            Go to Categories
+          </Button>
+        </Box>
+      ) : (
+        <>
+          {categories &&
+            categories.data.length > 0 &&
+            categories.data.map((category) => {
+              return <Stats key={category._id} category={category} />;
+            })}
+        </>
+      )}
     </Box>
   );
 };

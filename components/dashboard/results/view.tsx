@@ -3,12 +3,14 @@ import { stats } from "./data";
 import { Stat } from "./Stat";
 import { ResultsTable } from "./table";
 import { ResultsChart } from "./chart";
+import { IParticipant } from "@/models/Category";
 
 type Props = {
   view: "block" | "chart" | "table";
+  participants: IParticipant[];
 };
 
-const View = ({ view }: Props) => {
+const View = ({ view, participants }: Props) => {
   return (
     <>
       {view === "block" ? (

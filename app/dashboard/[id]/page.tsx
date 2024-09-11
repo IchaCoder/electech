@@ -9,7 +9,7 @@ type Props = {
 };
 
 const EventHomePage = async ({ params }: Props) => {
-  const { status, data, message } = await GetEvent(params.id);
+  const { data, message } = await GetEvent(params.id);
   if (message === "not-found") {
     notFound();
   }
