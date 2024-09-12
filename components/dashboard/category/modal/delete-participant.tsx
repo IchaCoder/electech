@@ -1,3 +1,5 @@
+import { DeleteParticipantRequest } from "@/app/actions/participant/delete";
+import { getTokenFromLocalStorage } from "@/lib/helpers";
 import {
   AlertDialog,
   AlertDialogBody,
@@ -7,16 +9,41 @@ import {
   AlertDialogOverlay,
   AlertDialogCloseButton,
   Button,
+  useToast,
 } from "@chakra-ui/react";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 type Props = {
   isOpen: boolean;
   onClose: () => void;
+  id: {
+    participantId: string;
+    categoryId: string;
+  };
+  reloadCategories: () => void;
 };
 
-function DeleteParticipantDialog({ isOpen, onClose }: Props) {
+function DeleteParticipantDialog({ isOpen, onClose, id, reloadCategories }: Props) {
   const cancelRef = useRef(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const toast = useToast();
+
+  const handleDelete = async () => {
+    const token = getTokenFromLocalStorage()!;
+    setIsLoading(true);
+    // Call delete participant request
+    const { message, status } = await DeleteParticipantRequest(id.categoryId, id.participantId, token);
+    toast({
+      title: message,
+      status: status,
+      duration: 3000,
+      isClosable: true,
+      position: "top-right",
+    });
+    setIsLoading(false);
+    reloadCategories();
+    onClose();
+  };
 
   return (
     <AlertDialog isOpen={isOpen} isCentered leastDestructiveRef={cancelRef} onClose={onClose}>
@@ -33,7 +60,7 @@ function DeleteParticipantDialog({ isOpen, onClose }: Props) {
             <Button ref={cancelRef} onClick={onClose}>
               Cancel
             </Button>
-            <Button colorScheme="red" onClick={onClose} ml={3}>
+            <Button colorScheme="red" onClick={handleDelete} isLoading={isLoading} ml={3}>
               Delete
             </Button>
           </AlertDialogFooter>
