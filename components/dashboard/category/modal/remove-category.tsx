@@ -1,3 +1,4 @@
+import { DeleteCategoryRequest } from "@/app/actions/category/delete";
 import {
   AlertDialog,
   AlertDialogBody,
@@ -7,16 +8,36 @@ import {
   AlertDialogOverlay,
   AlertDialogCloseButton,
   Button,
+  useToast,
 } from "@chakra-ui/react";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 type Props = {
   isOpen: boolean;
   onClose: () => void;
+  id: string;
+  reload: () => void;
 };
 
-function DeleteCategoryDialog({ isOpen, onClose }: Props) {
+function DeleteCategoryDialog({ isOpen, onClose, id, reload }: Props) {
   const cancelRef = useRef(null);
+  const [loading, setLoading] = useState(false);
+  const toast = useToast();
+
+  const handleDelete = async () => {
+    setLoading(true);
+    const { message, status } = await DeleteCategoryRequest(id);
+    toast({
+      title: message,
+      status: status,
+      duration: 3000,
+      isClosable: true,
+      position: "top-right",
+    });
+    onClose();
+    setLoading(false);
+    reload();
+  };
 
   return (
     <AlertDialog isOpen={isOpen} isCentered leastDestructiveRef={cancelRef} onClose={onClose}>
@@ -33,7 +54,7 @@ function DeleteCategoryDialog({ isOpen, onClose }: Props) {
             <Button ref={cancelRef} onClick={onClose}>
               Cancel
             </Button>
-            <Button colorScheme="red" onClick={onClose} ml={3}>
+            <Button colorScheme="red" onClick={handleDelete} isLoading={loading} ml={3}>
               Delete
             </Button>
           </AlertDialogFooter>

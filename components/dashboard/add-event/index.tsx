@@ -23,9 +23,9 @@ type Props = {};
 
 type FormValueTypes = {
   title: string;
-  start_date: Date;
+  start_date: string;
   start_time: string;
-  due_date: Date;
+  due_date: string;
   due_time: string;
   is_lock_event: boolean;
   org_domain: string;

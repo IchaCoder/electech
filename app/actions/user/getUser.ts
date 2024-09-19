@@ -11,10 +11,9 @@ const GetUser = async (token: string) => {
     return { message: "Token not found", status: "error" } as AuthResponseType<any>;
   }
 
+  await dbConnect();
   try {
     const payload = jwt.verify(token, process.env.JWT_SECRET!) as PayloadType;
-
-    await dbConnect();
 
     const user = await User.findById({ _id: payload.userId });
 

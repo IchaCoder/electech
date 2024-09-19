@@ -28,6 +28,8 @@ import { getTokenFromLocalStorage } from "@/lib/helpers";
 type Props = {
   isOpen: boolean;
   onClose: () => void;
+  categoryId: string;
+  reload: () => void;
 };
 
 type FormValueTypes = {
@@ -48,7 +50,7 @@ const defaultParticipantValues: ParticipantType["participants"][0] = {
   imgUrl: "",
 };
 
-export function AddParticipantDrawer({ isOpen, onClose }: Props) {
+export function AddParticipantDrawer({ isOpen, onClose, categoryId, reload }: Props) {
   const btnRef = useRef(null);
   const toast = useToast();
 
@@ -57,6 +59,7 @@ export function AddParticipantDrawer({ isOpen, onClose }: Props) {
     control,
     register,
     formState: { errors, isSubmitting },
+    reset,
   } = useForm<ParticipantType>({
     defaultValues: { participants: [defaultParticipantValues] },
   });
@@ -78,7 +81,7 @@ export function AddParticipantDrawer({ isOpen, onClose }: Props) {
     const participants = data.participants as unknown as IParticipant[];
 
     const token = getTokenFromLocalStorage();
-    const { message, status } = await AddParticipantRequest("66d541d0022edc3ef84f9668", token!, participants);
+    const { message, status } = await AddParticipantRequest(categoryId, token!, participants);
     toast({
       title: message,
       status: status,
@@ -86,6 +89,9 @@ export function AddParticipantDrawer({ isOpen, onClose }: Props) {
       isClosable: true,
       position: "top-right",
     });
+    reload();
+    onClose();
+    reset();
   };
 
   return (

@@ -29,7 +29,7 @@ import { useUser } from "@/context/user.context";
 import { IEvent } from "@/models/Event";
 import { getTokenFromLocalStorage } from "@/lib/helpers";
 import { useConditionalFetchData } from "@/hooks/useFetchData";
-import { ICategory } from "@/models/Category";
+import { ICategory, IParticipant } from "@/models/Category";
 import { useState } from "react";
 
 type Props = {
@@ -38,6 +38,7 @@ type Props = {
 
 const Category = ({ data }: Props) => {
   const [id, setId] = useState({ participantId: "", categoryId: "" });
+  const [participant, setParticipant] = useState<IParticipant>();
   const {
     isOpen: isOpenDeleteParticipant,
     onOpen: onOpenDeleteParticipant,
@@ -82,10 +83,34 @@ const Category = ({ data }: Props) => {
           id={id}
         />
       )}
-      {isOpenEditParticipant && <EditParticipant isOpen={isOpenEditParticipant} onClose={onCloseEditParticipant} />}
-      {isOpenRemoveCategory && <DeleteCategoryDialog isOpen={isOpenRemoveCategory} onClose={onCloseRemoveCategory} />}
-      {isOpenAddCategory && <AddCategoryModal isOpen={isOpenAddCategory} onClose={onCloseAddCategory} />}
-      {isOpenAddParticipant && <AddParticipantDrawer isOpen={isOpenAddParticipant} onClose={onCloseAddParticipant} />}
+      {isOpenEditParticipant && (
+        <EditParticipant
+          reload={reloadCategories}
+          id={id}
+          participant={participant!}
+          isOpen={isOpenEditParticipant}
+          onClose={onCloseEditParticipant}
+        />
+      )}
+      {isOpenRemoveCategory && (
+        <DeleteCategoryDialog
+          id={id.categoryId}
+          isOpen={isOpenRemoveCategory}
+          onClose={onCloseRemoveCategory}
+          reload={reloadCategories}
+        />
+      )}
+      {isOpenAddCategory && (
+        <AddCategoryModal event_id={data?._id!} isOpen={isOpenAddCategory} onClose={onCloseAddCategory} />
+      )}
+      {isOpenAddParticipant && (
+        <AddParticipantDrawer
+          categoryId={id.categoryId}
+          isOpen={isOpenAddParticipant}
+          onClose={onCloseAddParticipant}
+          reload={reloadCategories}
+        />
+      )}
       <Box py={8} px={{ base: 0, sm: 4, xl: 12 }}>
         <Stack flexDir={"row"} justifyContent={"space-between"} alignItems={"center"}>
           <Text fontWeight={"bold"} fontSize={{ base: "xl", md: "2xl", lg: "4xl" }}>
@@ -146,7 +171,10 @@ const Category = ({ data }: Props) => {
                           rounded={"lg"}
                           leftIcon={<IoMdAdd />}
                           title="Add another participant"
-                          onClick={onOpenAddParticipant}
+                          onClick={() => {
+                            onOpenAddParticipant();
+                            setId({ ...id, categoryId: category._id! });
+                          }}
                         >
                           Add
                         </Button>
@@ -156,7 +184,10 @@ const Category = ({ data }: Props) => {
                           rounded={"lg"}
                           leftIcon={<RiDeleteBin6Line />}
                           title="Remove this category"
-                          onClick={onOpenRemoveCategory}
+                          onClick={() => {
+                            onOpenRemoveCategory();
+                            setId({ ...id, categoryId: category._id! });
+                          }}
                         >
                           Remove
                         </Button>
@@ -194,7 +225,14 @@ const Category = ({ data }: Props) => {
                                     variant="outline"
                                   />
                                   <MenuList>
-                                    <MenuItem icon={<FiEdit2 />} onClick={onOpenEditParticipant}>
+                                    <MenuItem
+                                      icon={<FiEdit2 />}
+                                      onClick={() => {
+                                        setParticipant(participant);
+                                        onOpenEditParticipant();
+                                        setId({ participantId: participant._id, categoryId: category._id! });
+                                      }}
+                                    >
                                       Edit
                                     </MenuItem>
                                     <MenuItem
@@ -212,7 +250,7 @@ const Category = ({ data }: Props) => {
                                 <Avatar
                                   name={`${participant.first_name} ${participant.middle_name} ${participant.last_name}`}
                                   size={{ base: "2xl", md: "xl" }}
-                                  src={participant?.imageUrl}
+                                  src={participant?.imgUrl}
                                   display={"flex"}
                                   alignSelf={"center"}
                                 />
@@ -233,7 +271,10 @@ const Category = ({ data }: Props) => {
                             color={"white"}
                             _hover={{ opacity: 0.7 }}
                             _focus={{ opacity: 0.7 }}
-                            onClick={onOpenAddParticipant}
+                            onClick={() => {
+                              onOpenAddParticipant();
+                              setId({ ...id, categoryId: category._id! });
+                            }}
                           >
                             Add Participant
                           </Button>

@@ -12,7 +12,12 @@ export const POST = async (request: NextRequest) => {
 
   try {
     // Argon2id is the default variant
-    const hashedPassword = await argon2.hash(password);
+    // Argon2id config is recommended by Internet Engineering Task Force (IETF) for auth
+    const hashedPassword = await argon2.hash(password, {
+      memoryCost: 2 ** 16,
+      parallelism: 4,
+    });
+
     // update the name of a field we want to rename programmatically
     // const u = await User.updateMany({}, { $rename: { verfied: "is_verified" } });
     // console.log(u);

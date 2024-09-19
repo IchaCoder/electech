@@ -16,9 +16,11 @@ import LogoIcon from "@/app/icons/logo";
 import { FaBell } from "react-icons/fa";
 import { RxHamburgerMenu } from "react-icons/rx";
 import MobileSidebar from "../sidebar/mobile-sidebar";
+import { useUser } from "@/context/user.context";
 
 const Nav = () => {
   const { onOpen, onClose, isOpen } = useDisclosure();
+  const { loading, user } = useUser();
 
   return (
     <>
@@ -57,10 +59,10 @@ const Nav = () => {
                 <Avatar size={{ base: "sm", md: "md" }} name="Dan Abrahmov" src="https://bit.ly/dan-abramov" />
                 <Stack gap={0}>
                   <Text fontSize={{ base: "sm", sm: "md" }} fontWeight={"bold"}>
-                    Dan Abramov
+                    {user?.name}
                   </Text>
                   <Text fontSize={{ base: "xs", sm: "sm" }} color={"gray.500"}>
-                    Admin
+                    {user?.role === "admin" ? "Admin" : "Voter"}
                   </Text>
                 </Stack>
               </Stack>

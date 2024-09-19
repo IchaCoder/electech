@@ -1,3 +1,5 @@
+import { UpdateParticipantRequest } from "@/app/actions/participant/update";
+import { IParticipant } from "@/models/Category";
 import {
   Drawer,
   DrawerBody,
@@ -13,14 +15,21 @@ import {
   FormControl,
   FormErrorMessage,
   chakra,
+  useToast,
 } from "@chakra-ui/react";
 import Image from "next/image";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 
 type Props = {
   isOpen: boolean;
   onClose: () => void;
+  id: {
+    participantId: string;
+    categoryId: string;
+  };
+  participant: IParticipant;
+  reload: () => void;
 };
 
 type FormValueTypes = {
@@ -30,8 +39,9 @@ type FormValueTypes = {
   imgUrl: string;
 };
 
-function EditParticipant({ isOpen, onClose }: Props) {
+function EditParticipant({ isOpen, onClose, id, participant, reload }: Props) {
   const btnRef = useRef(null);
+  const toast = useToast();
 
   const {
     handleSubmit,
@@ -43,9 +53,25 @@ function EditParticipant({ isOpen, onClose }: Props) {
     clearErrors,
   } = useForm<FormValueTypes>();
 
-  const onSubmit = (data: FormValueTypes) => {
-    console.log(data);
+  const onSubmit = async (data: FormValueTypes) => {
+    const { message, status } = await UpdateParticipantRequest(id.categoryId, id.participantId, data);
+    toast({
+      title: message,
+      status: status,
+      duration: 3000,
+      isClosable: true,
+      position: "top-right",
+    });
+    onClose();
+    reload();
   };
+
+  useEffect(() => {
+    const fieldsArray: (keyof FormValueTypes)[] = ["first_name", "middle_name", "last_name"];
+    fieldsArray.forEach((field) => {
+      setValue(field, participant?.[field] || "");
+    });
+  }, []);
 
   return (
     <Drawer isOpen={isOpen} placement="right" onClose={onClose} size={"md"} finalFocusRef={btnRef}>
@@ -101,7 +127,7 @@ function EditParticipant({ isOpen, onClose }: Props) {
             <Button variant="outline" mr={3} onClick={onClose}>
               Cancel
             </Button>
-            <Button type="submit" colorScheme="blue">
+            <Button type="submit" isLoading={isSubmitting} colorScheme="blue">
               Save
             </Button>
           </DrawerFooter>

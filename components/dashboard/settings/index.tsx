@@ -22,13 +22,36 @@ import {
   Text,
   useDisclosure,
   useEditableControls,
+  useToast,
 } from "@chakra-ui/react";
 import DeleteEventModal from "./modal/delete-modal";
 import Duration from "./election-info";
+import { IEvent } from "@/models/Event";
+import { UpdateEvent } from "@/app/actions/event/update";
+import { useRouter } from "next/navigation";
 
-type Props = {};
+type Props = {
+  event: IEvent;
+};
 
-const Settings = (props: Props) => {
+const Settings = ({ event }: Props) => {
+  console.log(event);
+  const toast = useToast();
+  const router = useRouter();
+
+  const onSubmit = async (data: Partial<IEvent>) => {
+    console.log(data);
+    const { message, status } = await UpdateEvent(data, event._id!);
+    toast({
+      title: status === "success" ? "Success" : "Error",
+      description: message,
+      status,
+      duration: 4000,
+      position: "top-right",
+    });
+    router.refresh();
+  };
+
   const EditableControls = () => {
     const { isEditing, getSubmitButtonProps, getCancelButtonProps, getEditButtonProps } = useEditableControls();
 
@@ -48,7 +71,7 @@ const Settings = (props: Props) => {
 
   return (
     <>
-      {isOpen && <DeleteEventModal isOpen={isOpen} onClose={onClose} />}
+      {isOpen && <DeleteEventModal deleteId={event._id!} isOpen={isOpen} onClose={onClose} />}
       <Box py={8} px={{ base: 0, sm: 4, xl: 12 }}>
         <Box>
           <Text fontWeight={"bold"} fontSize={{ base: "xl", md: "2xl", lg: "4xl" }}>
@@ -56,8 +79,8 @@ const Settings = (props: Props) => {
           </Text>
           <Text color={"gray.600"}>Manage your account and election preferences</Text>
         </Box>
-        <Duration />
-        <Stack shadow={"md"} p={{ base: 4, sm: 8 }} mt={8} rounded={"lg"} bgColor={"#f4f4f4"}>
+        <Duration event={event} />
+        <Stack shadow={"md"} p={{ base: 4, sm: 8 }} mt={8} rounded={"lg"} bgColor={"white"}>
           <Box>
             <Text fontWeight={"bold"} fontSize={{ base: "xl", md: "2xl" }}>
               Preferences
@@ -66,14 +89,14 @@ const Settings = (props: Props) => {
               Change your preferences
             </Text>
             <Stack mt={4}>
-              <Stack flexDir={"row"} justifyContent={"space-between"}>
+              {/* <Stack flexDir={"row"} justifyContent={"space-between"}>
                 <Box>
                   <Text fontWeight={"medium"} fontSize={{ base: "sm", sm: "lg" }}>
                     Start time
                   </Text>
                 </Box>
                 <Switch id="lock-election" size={{ base: "sm", sm: "md" }} />
-              </Stack>
+              </Stack> */}
             </Stack>
           </Box>
           <Stack mt={4}>
@@ -86,45 +109,52 @@ const Settings = (props: Props) => {
                   Only users from the organization can view this event if checked
                 </Text>
               </Box>
-              <Switch id="lock-election" size={{ base: "sm", sm: "md" }} />
+              <Switch
+                id="lock-election"
+                defaultChecked={event.is_lock_event}
+                onChange={() => onSubmit({ is_lock_event: !event?.is_lock_event })}
+                size={{ base: "sm", sm: "md" }}
+              />
             </Stack>
-            <Stack mb={4}>
-              <FormControl id="domain">
-                <Stack
-                  direction={{ base: "column", md: "row" }}
-                  mt={6}
-                  spacing={{ base: "1.5", md: "8" }}
-                  justify="space-between"
-                >
-                  <Box>
-                    <FormLabel variant="inline" mb={0}>
-                      Org Domain
-                    </FormLabel>
-                    <Text color={"gray.600"} fontSize={{ base: "xs", sm: "sm" }}>
-                      Only users from the organization can view this election if checked
-                    </Text>
-                  </Box>
-                  {/* add isLoaded prop to skeleton if name is undefined
+            {event.is_lock_event && (
+              <Stack mb={4}>
+                <FormControl id="domain">
+                  <Stack
+                    direction={{ base: "column", md: "row" }}
+                    mt={6}
+                    spacing={{ base: "1.5", md: "8" }}
+                    justify="space-between"
+                  >
+                    <Box>
+                      <FormLabel variant="inline" mb={0}>
+                        Org Domain
+                      </FormLabel>
+                      <Text color={"gray.600"} fontSize={{ base: "xs", sm: "sm" }}>
+                        Only users from the organization can view this election if checked
+                      </Text>
+                    </Box>
+                    {/* add isLoaded prop to skeleton if name is undefined
               isLoaded={!userData?.name}
             */}
-                  <Skeleton height="30px" fadeDuration={1} isLoaded>
-                    <Editable
-                      // defaultValue={userData?.name}
-                      defaultValue={"Dan Abramov"}
-                      selectAllOnFocus={false}
-                      display={"flex"}
-                      alignItems={"center"}
-                      fontSize={{ base: "lg", md: "xl" }}
-                      // onSubmit={onSubmitName}
-                    >
-                      <EditablePreview fontSize={"md"} />
-                      <Input size={"sm"} as={EditableInput} />
-                      <EditableControls />
-                    </Editable>
-                  </Skeleton>
-                </Stack>
-              </FormControl>
-            </Stack>
+                    <Skeleton height="30px" fadeDuration={1} isLoaded={!!event?.org_domain}>
+                      <Editable
+                        defaultValue={event?.org_domain}
+                        selectAllOnFocus={false}
+                        display={"flex"}
+                        alignItems={"center"}
+                        fontSize={{ base: "lg", md: "xl" }}
+                        onSubmit={(value) => onSubmit({ org_domain: value })}
+                      >
+                        <EditablePreview fontSize={"md"} />
+                        <Input size={"sm"} as={EditableInput} />
+                        <EditableControls />
+                      </Editable>
+                    </Skeleton>
+                  </Stack>
+                </FormControl>
+              </Stack>
+            )}
+
             <Stack flexDir={"row"} justifyContent={"space-between"}>
               <Box>
                 <Text fontWeight={"medium"} fontSize={{ base: "sm", sm: "lg" }}>

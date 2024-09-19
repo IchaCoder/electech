@@ -31,7 +31,7 @@ const Voting = (props: Props) => {
               <Text>9th June 2024 - 07:00 AM</Text>
             </Stack>
           </Stack>
-          <CountDown />
+          {/* <CountDown /> */}
           <Stack spacing={4}>
             <Stack bgColor={"rgba(155, 214, 232, 0.5)"} py={8} gap={8} px={{ base: 2, sm: 4, xl: 12 }} rounded={"xl"}>
               <Text fontSize={"xl"} fontWeight={"medium"}>

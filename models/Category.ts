@@ -11,7 +11,7 @@ export interface ICategory extends mongoose.Document {
 
 export interface IParticipant extends mongoose.Document {
   _id: string;
-  imageUrl?: string;
+  imgUrl?: string;
   first_name: string;
   middle_name?: string;
   last_name: string;
@@ -22,7 +22,7 @@ export interface IParticipant extends mongoose.Document {
 
 const ParticipantSchema = new mongoose.Schema<IParticipant>(
   {
-    imageUrl: {
+    imgUrl: {
       type: String,
     },
     first_name: {

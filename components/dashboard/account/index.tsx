@@ -16,12 +16,36 @@ import {
   Stack,
   Text,
   useEditableControls,
+  useToast,
 } from "@chakra-ui/react";
 import { CheckIcon, CloseIcon, EditIcon } from "@chakra-ui/icons";
+import { useUser } from "@/context/user.context";
+import { useState } from "react";
+import { UpdateUser } from "@/app/actions/user/updateUser";
+import { getTokenFromLocalStorage } from "@/lib/helpers";
+import { useRouter } from "next/navigation";
 
 type Props = {};
 
 const Account = (props: Props) => {
+  const { loading, user } = useUser();
+  const [isLoading, setIsLoading] = useState(false);
+  const toast = useToast();
+  const router = useRouter();
+
+  const onSubmit = async (value: string, type: "name" | "phone") => {
+    const token = getTokenFromLocalStorage();
+    const { message, status } = await UpdateUser(token!, { [type]: value });
+    toast({
+      title: message,
+      status: status,
+      duration: 3000,
+      isClosable: true,
+      position: "top-right",
+    });
+    router.refresh();
+  };
+
   const EditableControls = () => {
     const { isEditing, getSubmitButtonProps, getCancelButtonProps, getEditButtonProps } = useEditableControls();
 
@@ -71,15 +95,14 @@ const Account = (props: Props) => {
                 {/* add isLoaded prop to skeleton if name is undefined
               isLoaded={!userData?.name}
             */}
-                <Skeleton height="30px" fadeDuration={1} isLoaded>
+                <Skeleton height="30px" fadeDuration={1} isLoaded={!loading}>
                   <Editable
-                    // defaultValue={userData?.name}
-                    defaultValue={"Dan Abramov"}
+                    defaultValue={user?.name}
                     selectAllOnFocus={false}
                     display={"flex"}
                     alignItems={"center"}
                     fontSize={{ base: "lg", md: "xl" }}
-                    // onSubmit={onSubmitName}
+                    onSubmit={(value) => onSubmit(value, "name")}
                   >
                     <EditablePreview />
                     <Input as={EditableInput} />
@@ -101,15 +124,14 @@ const Account = (props: Props) => {
                 {/* add isLoaded prop to skeleton if name is undefined
               isLoaded={!userData?.name}
             */}
-                <Skeleton height="30px" fadeDuration={1} isLoaded>
+                <Skeleton height="30px" fadeDuration={1} isLoaded={!loading}>
                   <Editable
-                    // defaultValue={userData?.name}
-                    defaultValue={"0555543385"}
+                    defaultValue={user?.phone}
                     selectAllOnFocus={false}
                     display={"flex"}
                     alignItems={"center"}
                     fontSize={{ base: "lg", md: "xl" }}
-                    // onSubmit={onSubmitName}
+                    onSubmit={(value) => onSubmit(value, "phone")}
                   >
                     <EditablePreview />
                     <Input as={EditableInput} />

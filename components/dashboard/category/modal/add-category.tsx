@@ -14,15 +14,15 @@ import {
   FormControl,
   useToast,
 } from "@chakra-ui/react";
-import { set } from "mongoose";
 import { FormEvent, useState } from "react";
 
 type Props = {
   isOpen: boolean;
   onClose: () => void;
+  event_id: string;
 };
 
-export function AddCategoryModal({ isOpen, onClose }: Props) {
+export function AddCategoryModal({ isOpen, onClose, event_id }: Props) {
   const [categories, setCategories] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const toast = useToast();
@@ -35,7 +35,7 @@ export function AddCategoryModal({ isOpen, onClose }: Props) {
     Replace event_id with the actual event id
     */
     const categoriesArray = categories.split(",").map((category) => {
-      return { title: category.trim(), event_id: "66d4a893022edc3ef84f9663" };
+      return { title: category.trim(), event_id };
     });
 
     const token = getTokenFromLocalStorage();

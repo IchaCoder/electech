@@ -50,7 +50,7 @@ const VoterDashboard = (props: Props) => {
           Search
         </Button>
       </Stack>
-      <EventList />
+      {/* <EventList /> */}
       <Box textAlign="center" mt={8}>
         <Text fontSize={{ base: "xl", xl: "2xl" }} fontWeight={"bold"}>
           Elections you have participated in will appear here

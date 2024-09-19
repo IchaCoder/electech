@@ -1,21 +1,28 @@
+import { UpdateEvent } from "@/app/actions/event/update";
 import { DatePicker } from "@/components/ui/date-picker";
-import { Box, Button, FormControl, FormErrorMessage, FormLabel, Input, Stack, Text } from "@chakra-ui/react";
-import React from "react";
+import { IEvent } from "@/models/Event";
+import { Box, Button, FormControl, FormErrorMessage, FormLabel, Input, Stack, Text, useToast } from "@chakra-ui/react";
+import { useRouter } from "next/navigation";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
-type Props = {};
+type Props = {
+  event: IEvent;
+};
 
 type DurationValueTypes = {
   title: string;
-  start_date: Date;
+  start_date: string;
   start_time: string;
-  due_date: Date;
+  due_date: string;
   due_time: string;
   is_lock_event: boolean;
   org_domain: string;
 };
 
-const ElectionInfo = (props: Props) => {
+const ElectionInfo = ({ event }: Props) => {
+  const router = useRouter();
+  const toast = useToast();
   const {
     handleSubmit,
     clearErrors,
@@ -26,14 +33,31 @@ const ElectionInfo = (props: Props) => {
     setError,
   } = useForm<DurationValueTypes>();
 
-  const [start_date, due_date] = watch(["start_date", "due_date"]);
+  const watchValues = watch();
 
-  const onSubmit = (data: DurationValueTypes) => {
-    console.log(data);
+  const onSubmit = async (data: DurationValueTypes) => {
+    const formData = data as unknown as Partial<IEvent>;
+    const { message, status } = await UpdateEvent(formData, event._id!);
+    toast({
+      title: status === "success" ? "Success" : "Error",
+      description: message,
+      status: status,
+      duration: 5000,
+      position: "top-right",
+    });
+    router.refresh();
   };
 
+  useEffect(() => {
+    setValue("title", event.title);
+    setValue("start_date", event.start_date);
+    setValue("start_time", event.start_time);
+    setValue("due_date", event.due_date);
+    setValue("due_time", event.due_time);
+  }, [event]);
+
   return (
-    <Stack shadow={"md"} p={{ base: 4, sm: 8 }} mt={8} rounded={"lg"} bgColor={"#f4f4f4"}>
+    <Stack shadow={"md"} p={{ base: 4, sm: 8 }} mt={8} rounded={"lg"} bgColor={"white"}>
       <Box>
         <Text fontWeight={"bold"} fontSize={{ base: "xl", md: "2xl" }}>
           Election Information
@@ -45,13 +69,13 @@ const ElectionInfo = (props: Props) => {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          if (!start_date) {
+          if (!watchValues.start_date) {
             setError("start_date", {
               type: "manual",
               message: "Start date is required",
             });
           }
-          if (!due_date) {
+          if (!watchValues.due_date) {
             setError("due_date", {
               type: "manual",
               message: "Due date is required",
@@ -76,7 +100,12 @@ const ElectionInfo = (props: Props) => {
           </FormControl>
           <FormControl isInvalid={!!errors.start_date}>
             <FormLabel>Start Date</FormLabel>
-            <DatePicker date={start_date} label="start_date" setValue={setValue} clearErrors={clearErrors} />
+            <DatePicker
+              date={watchValues?.start_date}
+              label="start_date"
+              setValue={setValue}
+              clearErrors={clearErrors}
+            />
             {errors?.start_date && <FormErrorMessage>{errors?.start_date?.message}.</FormErrorMessage>}
           </FormControl>
           <FormControl isInvalid={!!errors.start_time}>
@@ -93,7 +122,7 @@ const ElectionInfo = (props: Props) => {
           </FormControl>
           <FormControl isInvalid={!!errors.due_date}>
             <FormLabel>Due Date</FormLabel>
-            <DatePicker date={due_date} label="due_date" setValue={setValue} clearErrors={clearErrors} />
+            <DatePicker date={watchValues?.due_date} label="due_date" setValue={setValue} clearErrors={clearErrors} />
             {errors?.due_date && <FormErrorMessage>{errors?.due_date?.message}.</FormErrorMessage>}
           </FormControl>
           <FormControl isInvalid={!!errors.due_time}>
