@@ -15,7 +15,7 @@ export interface IParticipant extends mongoose.Document {
   first_name: string;
   middle_name?: string;
   last_name: string;
-  total_votes?: number;
+  total_votes: number;
   created_at?: string;
   updated_at?: string;
 }

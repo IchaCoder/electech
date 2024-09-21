@@ -7,6 +7,11 @@ import { Label, Pie, PieChart, Sector } from "recharts";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { PieSectorDataItem } from "recharts/types/polar/Pie";
+import { IParticipant } from "@/models/Category";
+
+type Props = {
+  participants: IParticipant[];
+};
 const chartData = [
   { browser: "chrome", visitors: 275, fill: "var(--color-chrome)" },
   { browser: "safari", visitors: 200, fill: "var(--color-safari)" },
@@ -41,29 +46,36 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export function ResultsChart() {
+export function ResultsChart({ participants }: Props) {
   const totalVisitors = React.useMemo(() => {
-    return chartData.reduce((acc, curr) => acc + curr.visitors, 0);
+    return participants.reduce((acc, curr) => acc + curr.total_votes, 0);
   }, []);
+
+  const data = participants.map((participant, index) => ({
+    name: `${participant.first_name} ${participant.last_name}`,
+    total_votes: participant.total_votes,
+    fill: `hsl(var(--chart-${index + 1}))`,
+  }));
+  console.log(data);
 
   return (
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
-        <CardTitle>Pie Chart - SRC President</CardTitle>
-        <CardDescription>Results for SRC President in a chart</CardDescription>
+        <CardTitle>Pie Chart</CardTitle>
+        {/* <CardDescription>Results for SRC President in a chart</CardDescription> */}
       </CardHeader>
       <CardContent className="flex-1 pb-0">
         <ChartContainer config={chartConfig} className="mx-auto aspect-square max-h-[250px]">
           <PieChart>
             <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
             <Pie
-              data={chartData}
+              data={data}
               activeIndex={0}
               activeShape={({ outerRadius = 0, ...props }: PieSectorDataItem) => (
                 <Sector {...props} outerRadius={outerRadius + 10} />
               )}
-              dataKey="visitors"
-              nameKey="browser"
+              dataKey="total_votes"
+              nameKey="name"
               innerRadius={60}
               strokeWidth={5}
             >

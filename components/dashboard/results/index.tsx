@@ -17,14 +17,17 @@ type ViewTypes = "block" | "chart" | "table";
 
 const Results = ({ data, ...rest }: Props) => {
   const [view, setView] = useState<ViewTypes>("block");
+  const [sort, setSort] = useState<"asc" | "desc" | "no-sort">("no-sort");
 
   const token = getTokenFromLocalStorage();
   const {
     data: categories,
     isLoading,
     error,
-  } = useConditionalFetchData<ICategory[]>({ endpoint: `categories?event_id=${data?._id}`, token: token! });
-  console.log(categories);
+  } = useConditionalFetchData<ICategory[]>({
+    endpoint: `categories?event_id=${data?._id}`,
+    token: token!,
+  });
 
   return (
     <Box py={8} px={{ base: 0, sm: 4, xl: 12 }}>
@@ -43,6 +46,7 @@ const Results = ({ data, ...rest }: Props) => {
               rounded="md"
               borderWidth={1}
               borderColor={"gray.800"}
+              onChange={(e) => setSort(e.target.value as "asc" | "desc" | "no-sort")}
               {...rest}
             >
               {sortByOptions.options.map((option) => (
@@ -106,7 +110,7 @@ const Results = ({ data, ...rest }: Props) => {
                           {category.title}
                         </Text>
                       </Stack>
-                      <View view={view} participants={category.participants} />
+                      <View view={view} data={category.participants} sort={sort} />
                     </Box>
                   )}
                 </React.Fragment>

@@ -1,3 +1,5 @@
+import { IParticipant } from "@/models/Category";
+
 /**
  * Retrieves the token from the local storage.
  * @returns {string | null} The token value if it exists, otherwise null.
@@ -64,3 +66,12 @@ export const convertTimeToAMOrPM = (time: string) => {
   const hoursIn12 = hours % 12 || 12;
   return `${hoursIn12}:${minutes < 10 ? "0" + minutes : minutes} ${period}`;
 };
+
+export function calculateVotePercentages(participants: IParticipant[]) {
+  const totalVotes = participants.reduce((sum, participant) => sum + participant.total_votes, 0);
+
+  return participants.map((participant) => ({
+    ...participant,
+    percentage: totalVotes > 0 ? ((participant.total_votes / totalVotes) * 100).toFixed(1) : 0,
+  }));
+}

@@ -3,8 +3,8 @@ import Image from "next/image";
 import { FiArrowDownRight, FiArrowUpRight, FiMoreVertical } from "react-icons/fi";
 
 interface Props {
-  value: string;
-  percentage: string;
+  value: number;
+  percentage: number | string;
   name: string;
 }
 export const Stat = (props: Props) => {
@@ -34,7 +34,7 @@ export const Stat = (props: Props) => {
           <Heading size={{ base: "md", md: "lg" }} fontWeight={"semibold"}>
             {value} votes
           </Heading>
-          <Heading size={{ base: "sm", md: "md" }}>{percentage}</Heading>
+          <Heading size={{ base: "sm", md: "md" }}>{percentage}%</Heading>
         </Stack>
       </Stack>
     </Box>

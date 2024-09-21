@@ -12,11 +12,11 @@ export const stats = [
 ];
 
 export const sortByOptions = {
-  defaultValue: "no-filter",
+  defaultValue: "no-sort",
   options: [
-    { label: "No Filter", value: "no-filter" },
-    { label: "Low to High", value: "low-to-high" },
-    { label: "High to Low", value: "high-to-low" },
+    { label: "No Sort", value: "no-sort" },
+    { label: "Low to High", value: "asc" },
+    { label: "High to Low", value: "desc" },
   ],
 };
 
