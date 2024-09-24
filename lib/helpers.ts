@@ -19,7 +19,7 @@ export const removeTokenFromLocalStorage = () => {
 const vercelEnv = process.env.NEXT_PUBLIC_VERCEL_ENV;
 export const isProd = process.env.NODE_ENV === "production" && vercelEnv === "production";
 
-export const url = process.env.NODE_ENV === "production" ? "https://electech.netlify.app" : "http://localhost:3000";
+export const url = process.env.NODE_ENV === "production" ? "https://electech.onrender.com" : "http://localhost:3000";
 
 // remove 0 from the beginning of phone number and replace with 233
 export const formatPhoneNumber = (number: string) => {
