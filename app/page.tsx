@@ -1,11 +1,17 @@
-import Image from "next/image";
-import LogoIcon from "./icons/logo";
+import Events from "@/components/events";
+import Footer from "@/components/footer";
+import Hero from "@/components/hero";
+import Nav from "@/components/nav/Nav";
+import WhyChooseUs from "@/components/why-choose-us";
 
 export default function Home() {
 	return (
-		<div>
-			Electech Loading...
-			<LogoIcon width={"9rem"} />
-		</div>
+		<>
+			<Nav />
+			<Hero />
+			<Events />
+			<WhyChooseUs />
+			<Footer />
+		</>
 	);
 }
