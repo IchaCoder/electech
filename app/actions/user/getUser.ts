@@ -4,7 +4,6 @@ import dbConnect from "@/lib/dbConnect";
 import User, { IUser } from "@/models/User";
 import { AuthResponseType } from "@/types/auth";
 import { PayloadType } from "@/types";
-import { redirect } from "next/navigation";
 
 const GetUser = async (token: string) => {
   if (!token) {
@@ -21,7 +20,7 @@ const GetUser = async (token: string) => {
   } catch (error: any) {
     console.log(error.name);
     if (error.name === "TokenExpiredError") {
-      redirect("/login");
+      return { message: "Token expired", status: "error" } as AuthResponseType<any>;
     }
 
     return { message: "Could not find user", status: "error", user: null } as AuthResponseType<any>;

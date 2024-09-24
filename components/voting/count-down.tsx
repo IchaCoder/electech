@@ -1,10 +1,10 @@
 import { Box, Button, Icon, Stack, Text, useDisclosure } from "@chakra-ui/react";
 import { VscChromeClose } from "react-icons/vsc";
-import { Timer } from "./Timer";
 import { Dispatch, SetStateAction } from "react";
-import ConfirmEndEvent from "./confirm-end-event";
 import { IEvent } from "@/models/Event";
 import { getEventStatus } from "@/lib/helpers";
+import ConfirmEndEvent from "../dashboard/home/count-down-timer/confirm-end-event";
+import { Timer } from "../dashboard/home/count-down-timer/Timer";
 
 type CountDownProps = {
   setIsShowCountDown: Dispatch<SetStateAction<boolean>>;
@@ -48,16 +48,6 @@ const CountDown = ({ setIsShowCountDown, eventId, isEnded, event }: CountDownPro
                       <Text fontWeight="medium" fontSize="xl" textAlign="center">
                         Till voting ends
                       </Text>
-
-                      <Button
-                        colorScheme="red"
-                        px="8"
-                        _focus={{ boxShadow: "none" }}
-                        _focusVisible={{ boxShadow: "outline" }}
-                        onClick={onOpen}
-                      >
-                        End Event
-                      </Button>
                       <Box
                         as="button"
                         aria-label="Close banner"

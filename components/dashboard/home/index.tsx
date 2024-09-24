@@ -8,6 +8,9 @@ import { IEvent } from "@/models/Event";
 import { convertTimeToAMOrPM, getTokenFromLocalStorage } from "@/lib/helpers";
 import { useConditionalFetchData } from "@/hooks/useFetchData";
 import { ICategory } from "@/models/Category";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { useUser } from "@/context/user.context";
 
 type Props = {
   data: IEvent;
@@ -16,16 +19,36 @@ type Props = {
 const Home = ({ data }: Props) => {
   const [isShowCountdown, setIsShowCountdown] = useState(true);
   const toast = useToast();
+  const pathname = usePathname();
+  const id = pathname.split("/")[2];
+  const router = useRouter();
+
+  const { loading, error } = useUser();
 
   const token = getTokenFromLocalStorage();
-  const {
-    data: categories,
-    isLoading,
-    error,
-  } = useConditionalFetchData<ICategory[]>({ endpoint: `categories?event_id=${data?._id}`, token: token! });
-  console.log(categories);
+  const { data: categories, isLoading } = useConditionalFetchData<ICategory[]>({
+    endpoint: `categories?event_id=${data?._id}`,
+    token: token!,
+  });
 
   const year = new Date(data?.start_date).getFullYear();
+
+  if (loading) {
+    return (
+      <Stack>
+        <Skeleton height="20px" width="full" />
+        <Skeleton height="20px" width="full" />
+        <Skeleton height="20px" width="full" />
+        <Skeleton height="20px" width="full" />
+        <Skeleton height="20px" width="full" />
+        <Skeleton height="20px" width="full" />
+      </Stack>
+    );
+  }
+
+  if (error === "Token expired") {
+    router.push("/login");
+  }
 
   return (
     <Box py={8} px={{ base: 0, sm: 4, xl: 12 }}>
@@ -81,7 +104,7 @@ const Home = ({ data }: Props) => {
         </Stack>
       </Stack>
       {isShowCountdown && (
-        <CountDown isEnded={data?.is_ended} setIsShowCountDown={setIsShowCountdown} eventId={data?._id!} />
+        <CountDown event={data} isEnded={data?.is_ended} setIsShowCountDown={setIsShowCountdown} eventId={data?._id!} />
       )}
       {isLoading ? (
         <Stack>
@@ -95,7 +118,14 @@ const Home = ({ data }: Props) => {
           <Text fontSize={"lg"} fontWeight={"medium"}>
             No Categories or Participants found
           </Text>
-          <Button bgColor={"rgba(97, 153, 203, 1)"} color={"white"} _hover={{ opacity: 0.7 }} _focus={{ opacity: 0.7 }}>
+          <Button
+            as={Link}
+            href={`/dashboard/${id}/category`}
+            bgColor={"rgba(97, 153, 203, 1)"}
+            color={"white"}
+            _hover={{ opacity: 0.7 }}
+            _focus={{ opacity: 0.7 }}
+          >
             Go to Categories
           </Button>
         </Box>

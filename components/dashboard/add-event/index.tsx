@@ -1,6 +1,7 @@
 "use client";
 import { AddEventRequest } from "@/app/actions/event/add";
 import { DatePicker } from "@/components/ui/date-picker";
+import { useUser } from "@/context/user.context";
 import { getTokenFromLocalStorage } from "@/lib/helpers";
 import { IEvent } from "@/models/Event";
 import {
@@ -12,10 +13,12 @@ import {
   FormHelperText,
   FormLabel,
   Input,
+  Skeleton,
   Stack,
   Text,
   useToast,
 } from "@chakra-ui/react";
+import { useRouter } from "next/navigation";
 import React from "react";
 import { useForm } from "react-hook-form";
 
@@ -33,6 +36,8 @@ type FormValueTypes = {
 
 const AddEvent = (props: Props) => {
   const toast = useToast();
+  const { error, loading } = useUser();
+  const router = useRouter();
   const {
     handleSubmit,
     register,
@@ -60,6 +65,21 @@ const AddEvent = (props: Props) => {
       reset();
     }
   };
+
+  if (loading) {
+    return (
+      <Stack>
+        <Skeleton height="20px" width="full" />
+        <Skeleton height="20px" width="full" />
+        <Skeleton height="20px" width="full" />
+        <Skeleton height="20px" width="full" />
+      </Stack>
+    );
+  }
+
+  if (error === "Token expired") {
+    router.push("/login");
+  }
 
   return (
     <Box py={8} px={{ base: 0, sm: 4, xl: 12 }}>

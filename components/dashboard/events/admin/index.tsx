@@ -53,19 +53,32 @@ const AdminDashboard = ({ data, isLoading }: Props) => {
           display={{ base: "none", lg: "block" }}
         />
       </Stack>
-      <Stack direction={{ base: "column", md: "row" }} mx={"auto"} my={8} width="full" maxW={{ md: "lg" }} spacing="4">
-        <FormControl flex="1">
-          <Input type="email" size="lg" placeholder="Enter event name" borderColor={"gray.400"} />
-          <FormHelperText color="gray.500">Search for an event</FormHelperText>
-        </FormControl>
+      <Stack direction={{ base: "column", md: "row" }} my={8} width="full" justifyContent={"space-between"} spacing="4">
+        <Stack direction={{ base: "column", sm: "row" }} spacing="4">
+          <FormControl flex="1">
+            <Input type="email" size="lg" placeholder="Enter event name" borderColor={"gray.400"} />
+            <FormHelperText color="gray.500">Search for an event</FormHelperText>
+          </FormControl>
+
+          <Button
+            size="lg"
+            bgColor={"rgba(97, 153, 203, 1)"}
+            color={"white"}
+            _hover={{ opacity: 0.7 }}
+            _focus={{ opacity: 0.7 }}
+          >
+            Search
+          </Button>
+        </Stack>
         <Button
-          size="lg"
+          as={Link}
+          href={"/dashboard/add-event"}
           bgColor={"rgba(97, 153, 203, 1)"}
           color={"white"}
           _hover={{ opacity: 0.7 }}
           _focus={{ opacity: 0.7 }}
         >
-          Search
+          Add Event
         </Button>
       </Stack>
       {isLoading ? (

@@ -49,7 +49,6 @@ export const SignInForm = (props: StackProps) => {
   } = useForm<FormValueTypes>();
 
   const onSubmit = async (data: FormValueTypes) => {
-    console.log(data);
     const res = await fetch(`${url}/api/signup`, {
       method: "POST",
       headers: {

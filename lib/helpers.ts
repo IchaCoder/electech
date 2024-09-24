@@ -12,6 +12,10 @@ export const setTokenToLocalStorage = (token: string) => {
   localStorage.setItem("e_token", token);
 };
 
+export const removeTokenFromLocalStorage = () => {
+  localStorage.removeItem("e_token");
+};
+
 const vercelEnv = process.env.NEXT_PUBLIC_VERCEL_ENV;
 export const isProd = process.env.NODE_ENV === "production" && vercelEnv === "production";
 
@@ -74,4 +78,20 @@ export function calculateVotePercentages(participants: IParticipant[]) {
     ...participant,
     percentage: totalVotes > 0 ? ((participant.total_votes / totalVotes) * 100).toFixed(1) : 0,
   }));
+}
+
+export function getStartDateTime(start_date: string, start_time: string): number {
+  // Combine start_date and start_time into a single ISO string
+  const startDateTimeString = `${start_date.split("T")[0]}T${start_time}:00.000Z`;
+
+  // Create a Date object from the combined string
+  const startDateTime = new Date(startDateTimeString);
+
+  // Return the timestamp in milliseconds
+  return startDateTime.getTime();
+}
+
+export function getEmailDomain(email: string): string {
+  const parts = email?.split("@");
+  return parts?.length > 1 ? `@${parts[1]}` : "";
 }

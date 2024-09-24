@@ -20,9 +20,10 @@ type Props = {
   isOpen: boolean;
   onClose: () => void;
   event_id: string;
+  reload: () => void;
 };
 
-export function AddCategoryModal({ isOpen, onClose, event_id }: Props) {
+export function AddCategoryModal({ isOpen, onClose, event_id, reload }: Props) {
   const [categories, setCategories] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const toast = useToast();
@@ -50,6 +51,7 @@ export function AddCategoryModal({ isOpen, onClose, event_id }: Props) {
     onClose();
     setCategories("");
     setIsLoading(false);
+    reload();
   };
 
   return (

@@ -10,6 +10,7 @@ import {
   Text,
   HStack,
   useDisclosure,
+  Skeleton,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import LogoIcon from "@/app/icons/logo";
@@ -17,10 +18,24 @@ import { FaBell } from "react-icons/fa";
 import { RxHamburgerMenu } from "react-icons/rx";
 import MobileSidebar from "../sidebar/mobile-sidebar";
 import { useUser } from "@/context/user.context";
+import { useRouter } from "next/navigation";
 
 const Nav = () => {
   const { onOpen, onClose, isOpen } = useDisclosure();
-  const { loading, user } = useUser();
+  const router = useRouter();
+  const { loading, user, error } = useUser();
+
+  if (loading) {
+    return (
+      <Stack>
+        <Skeleton height="20px" width="full" />
+      </Stack>
+    );
+  }
+
+  if (error === "Token expired") {
+    router.push("/login");
+  }
 
   return (
     <>
@@ -48,15 +63,15 @@ const Nav = () => {
             </HStack>
 
             <ButtonGroup gap={{ base: 0, sm: 8 }} alignItems={"center"}>
-              <IconButton
+              {/* <IconButton
                 aria-label="notification"
                 fontSize={{ base: "20px", md: "30px" }}
                 bgColor={"transparent"}
                 icon={<FaBell />}
-              />
+              /> */}
 
               <Stack flexDir={"row"}>
-                <Avatar size={{ base: "sm", md: "md" }} name="Dan Abrahmov" src="https://bit.ly/dan-abramov" />
+                <Avatar size={{ base: "sm", md: "md" }} name={`${user?.name}`} />
                 <Stack gap={0}>
                   <Text fontSize={{ base: "sm", sm: "md" }} fontWeight={"bold"}>
                     {user?.name}

@@ -31,6 +31,7 @@ import { getTokenFromLocalStorage } from "@/lib/helpers";
 import { useConditionalFetchData } from "@/hooks/useFetchData";
 import { ICategory, IParticipant } from "@/models/Category";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 type Props = {
   data: IEvent;
@@ -39,6 +40,10 @@ type Props = {
 const Category = ({ data }: Props) => {
   const [id, setId] = useState({ participantId: "", categoryId: "" });
   const [participant, setParticipant] = useState<IParticipant>();
+  const router = useRouter();
+
+  const { error, loading } = useUser();
+
   const {
     isOpen: isOpenDeleteParticipant,
     onOpen: onOpenDeleteParticipant,
@@ -69,9 +74,27 @@ const Category = ({ data }: Props) => {
   const {
     data: categories,
     isLoading,
-    error,
     mutate: reloadCategories,
   } = useConditionalFetchData<ICategory[]>({ endpoint: `categories?event_id=${data?._id}`, token: token! });
+
+  if (loading) {
+    return (
+      <Stack>
+        <Skeleton height="20px" width="full" />
+        <Skeleton height="20px" width="full" />
+        <Skeleton height="20px" width="full" />
+        <Skeleton height="20px" width="full" />
+        <Skeleton height="20px" width="full" />
+        <Skeleton height="20px" width="full" />
+        <Skeleton height="20px" width="full" />
+        <Skeleton height="20px" width="full" />
+      </Stack>
+    );
+  }
+
+  if (error === "Token expired") {
+    router.push("/login");
+  }
 
   return (
     <>
@@ -101,7 +124,12 @@ const Category = ({ data }: Props) => {
         />
       )}
       {isOpenAddCategory && (
-        <AddCategoryModal event_id={data?._id!} isOpen={isOpenAddCategory} onClose={onCloseAddCategory} />
+        <AddCategoryModal
+          event_id={data?._id!}
+          reload={reloadCategories}
+          isOpen={isOpenAddCategory}
+          onClose={onCloseAddCategory}
+        />
       )}
       {isOpenAddParticipant && (
         <AddParticipantDrawer

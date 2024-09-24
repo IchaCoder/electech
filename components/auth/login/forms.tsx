@@ -14,11 +14,16 @@ import {
   StackProps,
   Text,
   useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
 import LogoIcon from "@/app/icons/logo";
 import { Link } from "@chakra-ui/next-js";
 import { HiEye, HiEyeOff } from "react-icons/hi";
 import { useForm } from "react-hook-form";
+import { url } from "@/lib/helpers";
+import { AuthResponseType } from "@/types/auth";
+import { IUser } from "@/models/User";
+import { useRouter } from "next/navigation";
 
 type FormValueTypes = {
   email: string;
@@ -27,6 +32,8 @@ type FormValueTypes = {
 
 export const LogInForm = (props: StackProps) => {
   const { isOpen, onToggle } = useDisclosure();
+  const toast = useToast();
+  const router = useRouter();
 
   const {
     register,
@@ -34,8 +41,28 @@ export const LogInForm = (props: StackProps) => {
     formState: { errors, isSubmitting },
   } = useForm<FormValueTypes>();
 
-  const onSubmit = (data: FormValueTypes) => {
-    console.log(data);
+  const onSubmit = async (data: FormValueTypes) => {
+    const res = await fetch(`${url}/api/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+    const { message, token, status, user } = (await res.json()) as AuthResponseType<Partial<IUser>>;
+
+    toast({
+      title: message,
+      status: status,
+      duration: 3000,
+      position: "top-right",
+    });
+    if (status === "success" && user?.is_verified) {
+      router.push("/dashboard");
+    } else if (status === "success" && !user?.is_verified) {
+      router.push("/verify");
+    }
+    localStorage.setItem("e_token", token!);
   };
 
   return (
@@ -116,7 +143,7 @@ export const LogInForm = (props: StackProps) => {
               color={"white"}
               isLoading={isSubmitting}
             >
-              Sign up
+              Sign in
             </Button>
           </Stack>
         </Stack>

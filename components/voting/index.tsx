@@ -1,64 +1,162 @@
 "use client";
-import { Box, Text, Stack, ButtonGroup, Button, useDisclosure } from "@chakra-ui/react";
-import React from "react";
-import CountDown from "../dashboard/home/count-down-timer/count-down";
+import { Box, Text, Stack, ButtonGroup, Button, useDisclosure, Skeleton } from "@chakra-ui/react";
+import React, { useState } from "react";
 import CustomRadio from "./card-group";
 import { ConfirmVoteModal } from "./confirm-vote";
+import { IEvent } from "@/models/Event";
+import { convertTimeToAMOrPM, getEmailDomain, getEventStatus, getTokenFromLocalStorage } from "@/lib/helpers";
+import Link from "next/link";
+import { useUser } from "@/context/user.context";
+import CountDown from "./count-down";
+import { useConditionalFetchData } from "@/hooks/useFetchData";
+import { ICategory } from "@/models/Category";
 
-type Props = {};
+type Props = {
+  data: IEvent;
+};
 
-const Voting = (props: Props) => {
+type SelectedVotesType = {
+  [key: string]: string;
+};
+
+const Voting = ({ data }: Props) => {
+  const [selectedVotes, setSelectedVotes] = useState<SelectedVotesType>({});
+  const [isShowCountDown, setIsShowCountDown] = useState(true);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const year = new Date(data?.start_date).getFullYear();
+
+  const { user, error, loading } = useUser();
+
+  const token = getTokenFromLocalStorage();
+  const { data: categories, isLoading } = useConditionalFetchData<ICategory[]>({
+    endpoint: `categories?event_id=${data?._id}`,
+    token: token!,
+  });
+
+  if (loading) {
+    return (
+      <Stack>
+        <Skeleton height="20px" width="full" />
+        <Skeleton height="20px" width="full" />
+        <Skeleton height="20px" width="full" />
+        <Skeleton height="20px" width="full" />
+        <Skeleton height="20px" width="full" />
+        <Skeleton height="20px" width="full" />
+        <Skeleton height="20px" width="full" />
+        <Skeleton height="20px" width="full" />
+      </Stack>
+    );
+  }
+
   return (
     <>
-      {isOpen && <ConfirmVoteModal isOpen={isOpen} onClose={onClose} />}
+      {isOpen && (
+        <ConfirmVoteModal
+          setSelectedVotes={setSelectedVotes}
+          selectedVotes={selectedVotes}
+          isOpen={isOpen}
+          onClose={onClose}
+          event_id={data?._id!}
+        />
+      )}
       <Box bgColor={"brand.primary"} minH={"100vh"} py={10}>
-        <Box maxW={"1000px"} mx={"auto"} px={{ base: 4, sm: 8 }} py={12} bgColor={"#f4f4f4"} rounded={"2xl"}>
-          <Text fontWeight={"bold"} fontSize={{ base: "xl", lg: "3xl" }}>
-            UG SRC General Elections - 2024
-          </Text>
-          <Stack flexDir={"row"} gap={10}>
-            <Stack>
-              <Text fontSize={"lg"} fontWeight={"bold"}>
-                Start Date
-              </Text>
-              <Text>9th June 2024 - 09:00 AM</Text>
-            </Stack>
-            <Stack>
-              <Text fontSize={"lg"} fontWeight={"bold"}>
-                Due Date
-              </Text>
-              <Text>9th June 2024 - 07:00 AM</Text>
-            </Stack>
-          </Stack>
-          {/* <CountDown /> */}
-          <Stack spacing={4}>
-            <Stack bgColor={"rgba(155, 214, 232, 0.5)"} py={8} gap={8} px={{ base: 2, sm: 4, xl: 12 }} rounded={"xl"}>
-              <Text fontSize={"xl"} fontWeight={"medium"}>
-                SRC President
-              </Text>
-              <Stack mt={8} borderColor={"black"}>
-                <CustomRadio />
+        {user && data?.voters?.includes(user?._id!) ? (
+          <Box padding={"10"}>
+            <Text fontSize={"3xl"} color={"white"}>
+              Your vote has already been submitted
+            </Text>
+            <Button href="/dashboard" as={Link}>
+              Go to Dashboard
+            </Button>
+          </Box>
+        ) : (
+          <Box maxW={"1280px"} mx={"auto"} px={{ base: 4, sm: 8 }} py={12} bgColor={"#f4f4f4"} rounded={"2xl"}>
+            <Text fontWeight={"bold"} fontSize={{ base: "xl", lg: "3xl" }} textTransform={"uppercase"}>
+              {data?.title} - {year}
+            </Text>
+            <Stack flexDir={"row"} gap={10}>
+              <Stack>
+                <Text fontSize={"lg"} fontWeight={"bold"}>
+                  Start Date
+                </Text>
+                <Text>
+                  {new Date(data?.start_date).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}{" "}
+                  - {convertTimeToAMOrPM(data?.start_time)}
+                </Text>
+              </Stack>
+              <Stack>
+                <Text fontSize={"lg"} fontWeight={"bold"}>
+                  Due Date
+                </Text>
+                <Text>
+                  {new Date(data?.due_date).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}{" "}
+                  - {convertTimeToAMOrPM(data?.due_time)}
+                </Text>
               </Stack>
             </Stack>
-            <Stack bgColor={"rgba(155, 214, 232, 0.5)"} py={8} gap={8} px={{ base: 2, sm: 4, xl: 12 }} rounded={"xl"}>
-              <Text fontSize={"xl"} fontWeight={"medium"}>
-                SRC General Secretary
-              </Text>
-              <Stack mt={8} borderColor={"black"}>
-                <CustomRadio />
+
+            {isShowCountDown && (
+              <CountDown
+                event={data}
+                eventId={data?._id!}
+                isEnded={data?.is_ended}
+                setIsShowCountDown={setIsShowCountDown}
+              />
+            )}
+            {data?.is_lock_event && getEmailDomain(user?.email!) !== data?.org_domain ? (
+              <Stack my={6} textAlign={"center"}>
+                <Text fontSize={"3xl"} fontWeight={"bold"}>
+                  Election Locked
+                </Text>
+                <Text>Are you sure you belong to this organisation? Login and try again</Text>
               </Stack>
-            </Stack>
-          </Stack>
-          <ButtonGroup mt={8}>
-            <Button colorScheme="red" size={"lg"}>
-              Go to Home
-            </Button>
-            <Button colorScheme="blue" size={"lg"} onClick={onOpen}>
-              Submit
-            </Button>
-          </ButtonGroup>
-        </Box>
+            ) : (data?.is_lock_event && getEmailDomain(user?.email!) === data?.org_domain) || !data?.is_lock_event ? (
+              <Stack spacing={8}>
+                {categories?.data?.map((category) => {
+                  return (
+                    <Stack
+                      key={category._id}
+                      bgColor={"rgba(155, 214, 232, 0.5)"}
+                      py={8}
+                      gap={8}
+                      px={{ base: 2, sm: 4, xl: 12 }}
+                      rounded={"xl"}
+                    >
+                      <Text fontSize={"xl"} fontWeight={"medium"}>
+                        {category.title}
+                      </Text>
+                      <Stack mt={8} borderColor={"black"}>
+                        <CustomRadio
+                          participants={category.participants}
+                          category_id={category._id!}
+                          setSelectedVotes={setSelectedVotes}
+                        />
+                      </Stack>
+                    </Stack>
+                  );
+                })}
+              </Stack>
+            ) : (
+              <div></div>
+            )}
+            <ButtonGroup mt={8}>
+              <Button as={Link} href={"/"} colorScheme="red" size={"lg"}>
+                Go to Home
+              </Button>
+              <Button colorScheme="blue" size={"lg"} onClick={onOpen}>
+                Submit
+              </Button>
+            </ButtonGroup>
+          </Box>
+        )}
       </Box>
     </>
   );

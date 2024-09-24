@@ -29,6 +29,7 @@ import Duration from "./election-info";
 import { IEvent } from "@/models/Event";
 import { UpdateEvent } from "@/app/actions/event/update";
 import { useRouter } from "next/navigation";
+import { useUser } from "@/context/user.context";
 
 type Props = {
   event: IEvent;
@@ -39,8 +40,9 @@ const Settings = ({ event }: Props) => {
   const toast = useToast();
   const router = useRouter();
 
+  const { error, loading } = useUser();
+
   const onSubmit = async (data: Partial<IEvent>) => {
-    console.log(data);
     const { message, status } = await UpdateEvent(data, event._id!);
     toast({
       title: status === "success" ? "Success" : "Error",
@@ -68,6 +70,23 @@ const Settings = ({ event }: Props) => {
   };
 
   const { isOpen, onClose, onOpen } = useDisclosure();
+
+  if (loading) {
+    return (
+      <Stack>
+        <Skeleton height="20px" width="full" />
+        <Skeleton height="20px" width="full" />
+        <Skeleton height="20px" width="full" />
+        <Skeleton height="20px" width="full" />
+        <Skeleton height="20px" width="full" />
+        <Skeleton height="20px" width="full" />
+      </Stack>
+    );
+  }
+
+  if (error === "Token expired") {
+    router.push("/login");
+  }
 
   return (
     <>

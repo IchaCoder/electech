@@ -40,7 +40,7 @@ export const POST = async (req: NextRequest) => {
         message: "Login successful",
         token,
         status: "success",
-        user: { name: user.name, email: user.email },
+        user: { name: user.name, email: user.email, is_verified: user.is_verified },
       },
       { status: 200 }
     );

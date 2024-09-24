@@ -28,7 +28,7 @@ import { useRouter } from "next/navigation";
 type Props = {};
 
 const Account = (props: Props) => {
-  const { loading, user } = useUser();
+  const { loading, user, error } = useUser();
   const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
   const router = useRouter();
@@ -46,6 +46,9 @@ const Account = (props: Props) => {
     router.refresh();
   };
 
+  if (error === "Token expired") {
+    router.push("/login");
+  }
   const EditableControls = () => {
     const { isEditing, getSubmitButtonProps, getCancelButtonProps, getEditButtonProps } = useEditableControls();
 

@@ -1,10 +1,15 @@
-import { Box, Button, FormControl, FormHelperText, Input, Stack, Text, chakra } from "@chakra-ui/react";
+import { Box, Button, FormControl, FormHelperText, Input, Skeleton, Stack, Text, chakra } from "@chakra-ui/react";
 import { Image } from "@chakra-ui/next-js";
 import EventList from "../event-list";
+import { API_RESPONSE } from "@/lib/types";
+import { IEvent } from "@/models/Event";
 
-type Props = {};
+type Props = {
+  data: API_RESPONSE<IEvent[]>;
+  isLoading: boolean;
+};
 
-const VoterDashboard = (props: Props) => {
+const VoterDashboard = ({ data, isLoading }: Props) => {
   return (
     <Box py={8} px={{ base: 0, sm: 4, xl: 12 }}>
       <Stack
@@ -35,7 +40,7 @@ const VoterDashboard = (props: Props) => {
           display={{ base: "none", lg: "block" }}
         />
       </Stack>
-      <Stack direction={{ base: "column", md: "row" }} mx={"auto"} my={8} width="full" maxW={{ md: "lg" }} spacing="4">
+      {/* <Stack direction={{ base: "column", md: "row" }} mx={"auto"} my={8} width="full" maxW={{ md: "lg" }} spacing="4">
         <FormControl flex="1">
           <Input type="email" size="lg" placeholder="Enter event name" borderColor={"gray.400"} />
           <FormHelperText color="gray.500">Search for an event</FormHelperText>
@@ -49,13 +54,24 @@ const VoterDashboard = (props: Props) => {
         >
           Search
         </Button>
-      </Stack>
-      {/* <EventList /> */}
-      <Box textAlign="center" mt={8}>
-        <Text fontSize={{ base: "xl", xl: "2xl" }} fontWeight={"bold"}>
-          Elections you have participated in will appear here
-        </Text>
-      </Box>
+      </Stack> */}
+      {isLoading ? (
+        <Stack>
+          {Array(3)
+            .fill(0)
+            .map((_, i) => (
+              <Skeleton key={i} height="30px" width="full" />
+            ))}
+        </Stack>
+      ) : data && data.data.length > 0 ? (
+        <EventList data={data.data} />
+      ) : (
+        <Box textAlign="center" mt={8}>
+          <Text fontSize={{ base: "xl", xl: "2xl" }} fontWeight={"bold"}>
+            Elections you have participated in will appear here
+          </Text>
+        </Box>
+      )}
     </Box>
   );
 };

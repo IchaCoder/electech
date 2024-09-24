@@ -1,11 +1,10 @@
 import mongoose from "mongoose";
-
 export interface IUser extends mongoose.Document {
   _id?: string;
   name: string;
   email: string;
   phone: string;
-  role: string;
+  role: "user" | "admin";
   password: string;
   is_verified: boolean;
   created_at?: string;

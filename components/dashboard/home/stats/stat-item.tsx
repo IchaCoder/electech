@@ -2,7 +2,7 @@ import { Box, Heading, Stack, Text } from "@chakra-ui/react";
 
 interface Props {
   label: string;
-  value: string;
+  value: string | number;
 }
 export const Stat = (props: Props) => {
   const { label, value, ...boxProps } = props;

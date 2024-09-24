@@ -1,9 +1,20 @@
 import { Box, HStack, Text } from "@chakra-ui/react";
 import { useTimer } from "@/hooks/useTimer";
+import { IEvent } from "@/models/Event";
+import { getEventStatus, getStartDateTime } from "@/lib/helpers";
 
-const expiresInSeconds = new Date().getTime() + 141690000;
+type TimerProps = {
+  event: IEvent;
+};
 
-export const Timer = () => {
+export const Timer = ({ event }: TimerProps) => {
+  const eventStatus = getEventStatus(event.start_date, event.start_time, event.due_date, event.due_time);
+  const expiresInSeconds =
+    eventStatus === "not started"
+      ? getStartDateTime(event.start_date, event.start_time)
+      : eventStatus === "ongoing"
+      ? getStartDateTime(event.due_date, event.due_time)
+      : 0;
   const { seconds, minutes, hours, days } = useTimer({
     expiresInSeconds,
   });

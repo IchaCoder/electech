@@ -4,22 +4,24 @@ import Link from "next/link";
 import { FaRegCopy } from "react-icons/fa6";
 import React from "react";
 import { getEventStatus } from "@/lib/helpers";
+import { useUser } from "@/context/user.context";
 
 type Props = { data: IEvent[] };
 
 const EventList = ({ data }: Props) => {
   const toast = useToast();
   const uri = new URL(window.location.href);
+  const { user } = useUser();
 
   return (
-    <Stack direction={{ base: "column", sm: "row" }} spacing="4" flexWrap={"wrap"}>
+    <Stack direction={{ base: "column", sm: "row" }} spacing="4" mt={8} flexWrap={"wrap"}>
       {data?.map((event) => {
         const status = getEventStatus(event.start_date, event.start_time, event.due_date, event.due_time);
         return (
           <Card
             key={event._id}
             as={Link}
-            href={`/dashboard/${event._id}`}
+            href={user?.role === "admin" ? `/dashboard/${event._id}` : `/dashboard/${event._id}/results`}
             maxW={"400px"}
             bgColor={"gray.100"}
             borderRadius={"xl"}

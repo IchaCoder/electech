@@ -7,44 +7,44 @@ export const nav_links = {
     {
       name: "Home",
       icon: IoHomeOutline,
-      href: "/dashboard",
+      href: "",
     },
     {
       name: "Results",
       icon: FaChartLine,
-      href: "/dashboard/results",
+      href: "results",
     },
     {
-      name: "Cateogries",
+      name: "Categogries",
       icon: BiCategory,
-      href: "/dashboard/category",
+      href: "category",
     },
     {
       name: "Account",
       icon: IoPersonOutline,
-      href: "/dashboard/account",
+      href: "account",
     },
     {
       name: "Settings",
       icon: IoSettingsOutline,
-      href: "/dashboard/settings",
+      href: "settings",
     },
   ],
-  voter: [
+  user: [
     {
       name: "Results",
       icon: FaChartLine,
-      href: "/dashboard/results",
+      href: "results",
     },
     {
       name: "Account",
       icon: IoPersonOutline,
-      href: "/dashboard/account",
+      href: "account",
     },
     {
       name: "Settings",
       icon: IoSettingsOutline,
-      href: "/dashboard/settings",
+      href: "settings",
     },
   ],
 };
