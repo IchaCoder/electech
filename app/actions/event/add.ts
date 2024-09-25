@@ -17,9 +17,9 @@ export const AddEventRequest = async (data: IEvent, token: string) => {
 
     await dbConnect();
 
-    await Event.create({ ...data, added_by: payload.userId });
+    const event = await Event.create({ ...data, added_by: payload.userId });
 
-    return { message: "Event created successfully", status: "success" } as AuthResponseType<any>;
+    return { message: "Event created successfully", status: "success", token: event._id } as AuthResponseType<any>;
   } catch (error: any) {
     console.log(error.name);
     if (error.name === "TokenExpiredError") {

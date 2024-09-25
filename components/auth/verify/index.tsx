@@ -16,18 +16,20 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import ConfirmOtp from "@/app/actions/otp/confirm-otp";
 import { VerifyAccount } from "@/app/actions/auth/verify-account";
+import { useUser } from "@/context/user.context";
 
 export const Verify = (props: StackProps) => {
   const router = useRouter();
-  const [contactType, setContactType] = useState<"phone" | "email">("phone");
   const [otp, setOpt] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  const { user } = useUser();
 
   const toast = useToast();
 
   const onSubmit = async () => {
     setIsLoading(true);
-    const { status, message } = await ConfirmOtp({ otp, number: "233555543385" });
+    const { status, message } = await ConfirmOtp({ otp, id: user?._id! });
 
     if (status === "success") {
       const { status, message } = await VerifyAccount("ichabordyeboah247@gmail.com");
@@ -51,8 +53,6 @@ export const Verify = (props: StackProps) => {
     setIsLoading(false);
   };
 
-  const requestEmailOTP = () => {};
-
   return (
     <Stack maxW={"500px"} mx={"auto"} height={"100vh"} justifyContent={"center"} {...props}>
       <Stack spacing="8" alignItems={"center"}>
@@ -63,7 +63,7 @@ export const Verify = (props: StackProps) => {
           <Stack spacing={{ base: "2", md: "3" }} textAlign="center">
             <Heading size={{ base: "md", md: "lg" }}>Verify your account</Heading>
             <Text color="fg.muted">
-              An OTP has been sent to your +23333333, please verify to continue using Electech
+              An OTP has been sent to {user?.email}, please verify to continue using Electech
             </Text>
           </Stack>
         </Stack>
@@ -90,12 +90,12 @@ export const Verify = (props: StackProps) => {
           >
             Submit
           </Button>
-          <Text textAlign={"center"} cursor={"pointer"}>
+          {/* <Text textAlign={"center"} cursor={"pointer"}>
             OTP not received?{" "}
             <Button variant={"link"} color={"brand.primary"} onClick={() => setContactType("email")}>
               Use Email
             </Button>
-          </Text>
+          </Text> */}
           <Button
             colorScheme="blue"
             variant={"outline"}

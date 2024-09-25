@@ -3,14 +3,14 @@ import { Badge, Card, IconButton, Stack, Text, useToast } from "@chakra-ui/react
 import Link from "next/link";
 import { FaRegCopy } from "react-icons/fa6";
 import React from "react";
-import { getEventStatus } from "@/lib/helpers";
+import { getEventStatus, url } from "@/lib/helpers";
 import { useUser } from "@/context/user.context";
 
 type Props = { data: IEvent[] };
 
 const EventList = ({ data }: Props) => {
   const toast = useToast();
-  const uri = new URL(window.location.href);
+  const uri = `${url}/e`;
   const { user } = useUser();
 
   return (
@@ -38,9 +38,9 @@ const EventList = ({ data }: Props) => {
                 title="Copy election url"
                 onClick={(e) => {
                   e.preventDefault();
-                  navigator.clipboard.writeText(`${uri.origin}/vote/${event._id}`);
+                  navigator.clipboard.writeText(`${uri}/${event._id}`);
                   toast({
-                    title: "Copied to clipboard",
+                    title: "Link copied to clipboard",
                     status: "info",
                     duration: 3000,
                     isClosable: true,
