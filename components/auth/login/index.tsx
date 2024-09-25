@@ -49,7 +49,7 @@ const Login = () => (
           </Flex>
           <Flex align="center" h="24">
             <Text color="fg.accent.subtle" textStyle="sm">
-              © 2022 Electech. All rights reserved.
+              © {new Date().getFullYear()} Electech. All rights reserved.
             </Text>
           </Flex>
         </Flex>

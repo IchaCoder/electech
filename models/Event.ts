@@ -11,7 +11,6 @@ export interface IEvent extends mongoose.Document {
   added_by: mongoose.Types.ObjectId | string;
   org_domain?: string;
   is_ended: boolean;
-  short_url: string;
   voters: string[];
   created_at?: string;
   updated_at?: string;
@@ -50,9 +49,6 @@ const EventSchema = new mongoose.Schema<IEvent>(
     is_ended: {
       type: Boolean,
       default: false,
-    },
-    short_url: {
-      type: String,
     },
     voters: [
       {

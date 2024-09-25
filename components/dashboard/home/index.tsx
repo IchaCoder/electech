@@ -5,7 +5,7 @@ import CountDown from "./count-down-timer/count-down";
 import { Stats } from "./stats";
 import { FaRegCopy } from "react-icons/fa6";
 import { IEvent } from "@/models/Event";
-import { convertTimeToAMOrPM, getTokenFromLocalStorage } from "@/lib/helpers";
+import { convertTimeToAMOrPM, getTokenFromLocalStorage, url } from "@/lib/helpers";
 import { useConditionalFetchData } from "@/hooks/useFetchData";
 import { ICategory } from "@/models/Category";
 import Link from "next/link";
@@ -22,6 +22,7 @@ const Home = ({ data }: Props) => {
   const pathname = usePathname();
   const id = pathname.split("/")[2];
   const router = useRouter();
+  const uri = `${url}/e/${id}`;
 
   const { loading, error } = useUser();
 
@@ -62,14 +63,15 @@ const Home = ({ data }: Props) => {
             _hover={{ backgroundColor: "blue.400", color: "white" }}
             rightIcon={<FaRegCopy />}
             colorScheme="blue"
-            onClick={() =>
+            onClick={() => {
+              navigator.clipboard.writeText(uri);
               toast({
                 title: "Link Copied Successfully",
                 status: "info",
                 duration: 3000,
                 position: "top-right",
-              })
-            }
+              });
+            }}
           >
             Copy
           </Button>

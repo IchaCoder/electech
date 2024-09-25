@@ -94,3 +94,8 @@ export function getEmailDomain(email: string): string {
   const parts = email?.split("@");
   return parts?.length > 1 ? `@${parts[1]}` : "";
 }
+
+export function generateOTP(): string {
+  const otp = Math.floor(100000 + Math.random() * 900000);
+  return otp.toString();
+}

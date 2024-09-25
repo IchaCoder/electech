@@ -51,12 +51,5 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
     fetchUser();
   }, [pathname]);
 
-  useEffect(() => {
-    const token = getTokenFromLocalStorage();
-    if (pathname.includes("dashboard") && user?.is_verified === false && token) {
-      router.push("/verify");
-    }
-  }, [pathname, user]);
-
   return <UserContext.Provider value={{ loading, error, user }}>{children}</UserContext.Provider>;
 };

@@ -54,7 +54,7 @@ const AdminDashboard = ({ data, isLoading }: Props) => {
         />
       </Stack>
       <Stack direction={{ base: "column", md: "row" }} my={8} width="full" justifyContent={"space-between"} spacing="4">
-        <Stack direction={{ base: "column", sm: "row" }} spacing="4">
+        {/* <Stack direction={{ base: "column", sm: "row" }} spacing="4">
           <FormControl flex="1">
             <Input type="email" size="lg" placeholder="Enter event name" borderColor={"gray.400"} />
             <FormHelperText color="gray.500">Search for an event</FormHelperText>
@@ -69,7 +69,7 @@ const AdminDashboard = ({ data, isLoading }: Props) => {
           >
             Search
           </Button>
-        </Stack>
+        </Stack> */}
         <Button
           as={Link}
           href={"/dashboard/add-event"}
