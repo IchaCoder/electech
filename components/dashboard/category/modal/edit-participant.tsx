@@ -1,4 +1,6 @@
+import { SaveImageUrl } from "@/app/actions/participant/save-image";
 import { UpdateParticipantRequest } from "@/app/actions/participant/update";
+import { AvatarUploader } from "@/components/image-uploader/uploader";
 import { IParticipant } from "@/models/Category";
 import {
   Drawer,
@@ -49,8 +51,6 @@ function EditParticipant({ isOpen, onClose, id, participant, reload }: Props) {
     formState: { errors, isSubmitting },
     watch,
     setValue,
-    setError,
-    clearErrors,
   } = useForm<FormValueTypes>();
 
   const onSubmit = async (data: FormValueTypes) => {
@@ -78,25 +78,36 @@ function EditParticipant({ isOpen, onClose, id, participant, reload }: Props) {
       <DrawerOverlay />
       <DrawerContent>
         <DrawerCloseButton />
-        <DrawerHeader>Add Participant</DrawerHeader>
+        <DrawerHeader>Edit Participant</DrawerHeader>
         <chakra.form onSubmit={handleSubmit(onSubmit)}>
           <DrawerBody>
             <Stack spacing={4} p={{ base: 2, sm: 4 }} shadow={"md"}>
               <Stack>
-                <Image
-                  src="/placeholder.png"
-                  alt="Profile Picture"
-                  width="100"
-                  height="100"
-                  className="mx-auto rounded-full"
-                  style={{ aspectRatio: "200/200", objectFit: "cover" }}
+                {participant.imgUrl ? (
+                  <Image
+                    src={participant.imgUrl}
+                    alt="Profile Picture"
+                    width="100"
+                    height="100"
+                    className="mx-auto rounded-full"
+                    style={{ aspectRatio: "200/200", objectFit: "cover" }}
+                  />
+                ) : (
+                  <Image
+                    src="/placeholder.png"
+                    alt="Profile Picture"
+                    width="100"
+                    height="100"
+                    className="mx-auto rounded-full"
+                    style={{ aspectRatio: "200/200", objectFit: "cover" }}
+                  />
+                )}
+                <AvatarUploader
+                  onUploadSuccess={(url) => {
+                    SaveImageUrl(id.categoryId, id.participantId, url);
+                    reload();
+                  }}
                 />
-                <div className="space-y-2">
-                  <FormLabel m={0} htmlFor="image">
-                    Picture
-                  </FormLabel>
-                  <Input id="image" type="file" />
-                </div>
               </Stack>
               <FormControl isInvalid={!!errors.first_name}>
                 <FormLabel htmlFor="first_name">First Name</FormLabel>

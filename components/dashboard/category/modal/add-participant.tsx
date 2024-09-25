@@ -24,6 +24,7 @@ import { CloseIcon } from "@chakra-ui/icons";
 import { IParticipant } from "@/models/Category";
 import { AddParticipantRequest } from "@/app/actions/participant/add";
 import { getTokenFromLocalStorage } from "@/lib/helpers";
+import { AvatarUploader } from "@/components/image-uploader/uploader";
 
 type Props = {
   isOpen: boolean;
@@ -105,22 +106,6 @@ export function AddParticipantDrawer({ isOpen, onClose, categoryId, reload }: Pr
             <Stack spacing={8}>
               {fields.map((field, index) => (
                 <Stack spacing={4} p={{ base: 2, sm: 4 }} position={"relative"} key={field.id} shadow={"md"}>
-                  <Stack>
-                    <Image
-                      src="/placeholder.png"
-                      alt="Profile Picture"
-                      width="100"
-                      height="100"
-                      className="mx-auto rounded-full"
-                      style={{ aspectRatio: "200/200", objectFit: "cover" }}
-                    />
-                    <div className="space-y-2">
-                      <FormLabel m={0} htmlFor="image">
-                        Picture
-                      </FormLabel>
-                      <Input id="image" type="file" />
-                    </div>
-                  </Stack>
                   <FormControl isInvalid={!!errors.participants?.[index]?.first_name}>
                     <FormLabel htmlFor="first_name">First Name</FormLabel>
                     <Input
