@@ -47,7 +47,6 @@ const ConfirmOtp = async (data: ConfirmOtpType) => {
     if (user.otp !== data.otp) {
       return { message: "Invalid OTP", status: "error" };
     }
-    console.log(user.otp === data.otp);
 
     if (user.otp === data.otp) {
       user.is_verified = true;

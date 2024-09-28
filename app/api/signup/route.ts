@@ -39,7 +39,7 @@ export const POST = async (request: NextRequest) => {
       },
       body: JSON.stringify({
         message: `<div> Your code is <strong>${otp}</strong></div>`,
-        to: "ichabordyeboah247@gmail.com",
+        to: user.email,
       }),
     });
 
