@@ -32,7 +32,7 @@ export const Verify = (props: StackProps) => {
     const { status, message } = await ConfirmOtp({ otp, id: user?._id! });
 
     if (status === "success") {
-      const { status, message } = await VerifyAccount("ichabordyeboah247@gmail.com");
+      const { status, message } = await VerifyAccount(user?.email!);
       toast({
         title: status === "success" ? "Success" : "Error",
         description: message,
